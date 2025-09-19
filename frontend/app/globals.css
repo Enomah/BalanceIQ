@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+:root {
+  --brand-primary: #0d8af1;
+  --brand-primary-light: #7cc2ff;
+  --brand-primary-dark: #0353a6;
+  
+  --primary-50: #f0f7ff;
+  --primary-100: #e0effe;
+  --primary-200: #b9ddff;
+  --primary-300: #7cc2ff;
+  --primary-400: #36a2ff;
+  --primary-500: #0d8af1;
+  --primary-600: #026ace;
+  --primary-700: #0353a6;
+  --primary-800: #074785;
+  --primary-900: #0c3c6e;
+  --primary-950: #082649;
+
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+  --neutral-950: #030712;
+
+  --success-50: #f0fdf4;
+  --success-100: #dcfce7;
+  --success-200: #bbf7d0;
+  --success-300: #86efac;
+  --success-400: #4ade80;
+  --success-500: #22c55e;
+  --success-600: #16a34a;
+  --success-700: #15803d;
+  --success-800: #166534;
+  --success-900: #14532d;
+  --success-950: #052e16;
+
+  --warning-50: #fffbeb;
+  --warning-100: #fef3c7;
+  --warning-200: #fde68a;
+  --warning-300: #fcd34d;
+  --warning-400: #fbbf24;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --warning-700: #b45309;
+  --warning-800: #92400e;
+  --warning-900: #78350f;
+  --warning-950: #451a03;
+
+  --error-50: #fef2f2;
+  --error-100: #fee2e2;
+  --error-200: #fecaca;
+  --error-300: #fca5a5;
+  --error-400: #f87171;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+  --error-700: #b91c1c;
+  --error-800: #991b1b;
+  --error-900: #7f1d1d;
+  --error-950: #450a0a;
+
+  --bg-primary: var(--neutral-50);
+  --bg-secondary: white;
+  --bg-tertiary: var(--neutral-100);
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary: var(--neutral-500);
+  --border-light: var(--neutral-200);
+  --border-medium: var(--neutral-300);
+  --focus-ring: var(--primary-500);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Component Specific */
+  --sidebar-bg: var(--neutral-50);
+  --header-bg: white;
+  --card-bg: white;
+  --input-bg: white;
+  --table-stripe: var(--neutral-50);
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --bg-primary: var(--neutral-950);
+  --bg-secondary: var(--neutral-900);
+  --bg-tertiary: var(--neutral-800);
+  --text-primary: var(--neutral-50);
+  --text-secondary: var(--neutral-200);
+  --text-tertiary: var(--neutral-400);
+  --border-light: var(--neutral-800);
+  --border-medium: var(--neutral-700);
+  --focus-ring: var(--primary-400);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3),
+    0 4px 6px -4px rgb(0 0 0 / 0.3);
+
+  /* Component Specific - Dark Mode */
+  --sidebar-bg: var(--neutral-900);
+  --header-bg: var(--neutral-900);
+  --card-bg: var(--neutral-800);
+  --input-bg: var(--neutral-800);
+  --table-stripe: var(--neutral-900);
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: none !important; 
+  -ms-overflow-style: none !important;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+  cursor: pointer;
+}
+
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+.bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.border-light {
+  border-color: var(--border-light);
+}
+.border-medium {
+  border-color: var(--border-medium);
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.btn-primary {
+  background-color: var(--primary-600);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-700);
+}
+
+.chart-income {
+  color: var(--success-500);
+}
+
+.chart-expense {
+  color: var(--error-500);
+}
+
+.chart-savings {
+  color: var(--primary-500);
+}
+
+.mobile-nav-panel {
+  will-change: transform;
+}
+
+.mobile-nav-overlay {
+  will-change: opacity;
+}
+
+.mobile-nav-item {
+  will-change: transform, opacity;
+}
