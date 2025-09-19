@@ -4,9 +4,7 @@ import { requestOtp } from "../controllers/auth/requestOtp.js";
 import { verifyOtp } from "../controllers/auth/verifyOtp.js";
 import { login } from "../controllers/auth/login.js";
 import { resetPassword } from "../controllers/auth/resetPassword.js";
-
 const router = express.Router();
-
 router.post("/register", registerUser);
 router.post("/request-otp", requestOtp);
 router.post("/verify-otp", verifyOtp);
