@@ -3,29 +3,26 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./src/routes/authRoutes.js"
+import onboardingRoutes from "./src/routes/onboardingRoutes.js"
 
-dotenv.config(); // Loads .env file into process.env
+dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(express.json()); // Parse JSON request bodies
-app.use(cors()); // Allow requests from frontend (different domain/port)
+app.use(express.json());
+app.use(cors());
 
-// Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/onboarding", onboardingRoutes);
 
-// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Test route
 app.get("/", (req, res) => {
   res.send("BalanceIQ Backend is running...");
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

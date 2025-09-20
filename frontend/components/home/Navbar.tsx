@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import {
   ArrowRight,
   DollarSign,
-  LayoutDashboard,
-  Lightbulb,
+  Home,
+  Info,
+  Mail,
   Menu,
-  Save,
-  Scale,
-  Settings,
-  ShoppingBag,
-  ShoppingBasket,
-  Store,
 } from "lucide-react";
 import MobileNav from "./MobileNav";
 import ThemeToggle from "../ui/ThemeToggle";
 import Link from "next/link";
 import Logo from "../ui/Logo";
+import { useAuthStore } from "@/store/authStore";
+import ProfilePreview from "../ui/ProfilePreview";
+import { usePathname } from "next/navigation";
 
 export interface NavItem {
   label: string;
@@ -26,13 +24,16 @@ export interface NavItem {
 
 const Navbar: React.FC = ({}) => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const { isSignedIn } = useAuthStore();
+  const pathname = usePathname();
+
+  console.log(pathname);
 
   const mainNavItems: NavItem[] = [
-    { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
-    { href: "/transactions", label: "Transactions", icon: <ShoppingBag /> },
-    { href: "/savings", label: "Savings", icon: <DollarSign /> },
-    { href: "/insights", label: "Insights", icon: <Lightbulb /> },
-    { href: "/settings", label: "Settings", icon: <Settings /> },
+    { href: "/", label: "Home", icon: <Home /> },
+    { href: "/about", label: "About", icon: <Info /> },
+    { href: "/pricing", label: "Pricing", icon: <DollarSign /> },
+    { href: "/contact", label: "Contact", icon: <Mail /> },
   ];
 
   return (
@@ -46,26 +47,34 @@ const Navbar: React.FC = ({}) => {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-[var(--text-primary)] hover:text-[var(--primary-500)] transition-colors"
+                className={`${
+                  pathname === item.href
+                    ? "text-[var(--primary-500)]"
+                    : "text-[var(--text-primary)]"
+                } hover:text-[var(--primary-500)] transition-colors`}
               >
                 {item.label}
               </Link>
             ))}
           </div>
 
-          <div className="flex items-center gap-[20px]">
+          <div className="flex items-center gap-[10px] md:gap-[20px]">
             <div className="">
               <ThemeToggle />
             </div>
 
-            <div className="flex space-x-4 hidden md:block">
-              <Link
-                href={"/login"}
-                className="px-4 py-2 bg-[var(--primary-500)] text-white rounded-lg hover:bg-[var(--primary-700)] transition-colors flex items-center"
-              >
-                Login <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
+            {isSignedIn ? (
+              <ProfilePreview />
+            ) : (
+              <div className="flex space-x-4 hidden md:block">
+                <Link
+                  href={"/login"}
+                  className="px-4 py-2 bg-[var(--primary-500)] text-white rounded-lg hover:bg-[var(--primary-700)] transition-colors flex items-center"
+                >
+                  Login <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </div>
+            )}
 
             <button
               className="md:hidden p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"

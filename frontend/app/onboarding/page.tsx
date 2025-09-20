@@ -1,12 +1,8 @@
-"use client"
+import Onboarding from '@/components/onboarding/Onboarding'
+import React from 'react'
 
-import { requireAuth } from "@/lib/requireAuth"
-
-export default function OnboardingPage() {
-  requireAuth()
+export default function page() {
   return (
-   <>
-   
-   </>
+    <Onboarding/>
   )
 }

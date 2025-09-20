@@ -32,10 +32,10 @@ const initializeState = () => {
 
       if (userProfile && typeof userProfile === "object" && userProfile.nickname) {
         state = { accessToken, userProfile, isSignedIn: true };
-        console.log("Initialized from cookies:", {
-          accessToken: accessToken ? "present" : "missing",
-          userProfile: userProfile.nickname,
-        });
+        // console.log("Initialized from cookies:", {
+        //   accessToken: accessToken ? "present" : "missing",
+        //   userProfile: userProfile.nickname,
+        // });
       } else {
         console.error(
           "Invalid userProfile structure in cookie:",

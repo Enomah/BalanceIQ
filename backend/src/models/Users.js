@@ -44,6 +44,18 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    currency: {
+      type: String,
+      default: "USD",
+    },
+    incomeSource: {
+      type: String,
+      default: "Salary",
+    },
+    monthlyIncome: { type: Number, default: 0 },
+    spendingCategories: {
+      type: [String],
+    },
   },
   { timestamps: true }
 );

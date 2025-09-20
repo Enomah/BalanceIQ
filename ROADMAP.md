@@ -29,7 +29,7 @@
 **Backend:**
 - User model → `{ name, email, password, createdAt }`.
 - JWT authentication.
-- Email OTP verification.
+- Email OTP verification
 - Forgot/reset password flow.
 
 **Frontend:**
