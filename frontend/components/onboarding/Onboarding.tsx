@@ -75,18 +75,6 @@ export default function Onboarding() {
     );
     formDataToSend.append("budgetingStyle", formData.budgetingStyle);
 
-    // for (const [key, value] of formDataToSend.entries()) {
-    //   if (value instanceof File) {
-    //     console.log(`${key}:`, {
-    //       name: value.name,
-    //       type: value.type,
-    //       size: `${(value.size / 1024).toFixed(2)} KB`,
-    //     });
-    //   } else {
-    //     console.log(`${key}:`, value);
-    //   }
-    // }
-
     try {
       setIsSubmitting(true);
       setError(null);
@@ -98,6 +86,10 @@ export default function Onboarding() {
         },
         body: formDataToSend,
       });
+
+      const data = await response.json();
+
+      // console.log(data)
 
       if (!response.ok) {
         let errorData;
@@ -114,7 +106,7 @@ export default function Onboarding() {
         );
       }
 
-      const data = await response.json();
+     
       if (data.proceed) {
         window.location.href = "/dashboard";
       } else {

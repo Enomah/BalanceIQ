@@ -15,8 +15,8 @@ const goalSchema = new mongoose.Schema(
     progress: {type: Number},
     status: {
       type: String,
-      enum: ["Active", "Completed", "Abandoned"],
-      default: "Active",
+      enum: ["active", "completed", "abandoned", "failed"],
+      default: "active",
     },
   },
   { timestamps: true }

@@ -62,7 +62,7 @@ export const onboard = async (req, res) => {
       budgetingStyle,
       currentAmount: 0,
       progress: 0,
-      status: "Active",
+      status: "active",
     });
 
     return res.json({

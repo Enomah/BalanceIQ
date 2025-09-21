@@ -53,6 +53,7 @@ const userSchema = new mongoose.Schema(
       default: "Salary",
     },
     monthlyIncome: { type: Number, default: 0 },
+    balance: { type: Number, default: 0 },
     spendingCategories: {
       type: [String],
     },

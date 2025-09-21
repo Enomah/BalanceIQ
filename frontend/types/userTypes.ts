@@ -5,4 +5,5 @@ export interface User {
     fullName: string;
     nickname: string;
     isVerified: string;
+    currency: string;
 }

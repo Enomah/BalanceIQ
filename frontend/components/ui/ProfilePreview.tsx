@@ -51,7 +51,7 @@ export default function ProfilePreview() {
       id: "dashboard",
       label: "Dashboard",
       icon: User,
-      href: "/Dashboard",
+      href: "/dashboard",
     },
     {
       id: "transactions",

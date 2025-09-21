@@ -127,69 +127,53 @@ button {
   cursor: pointer;
 }
 
-.bg-primary {
-  background-color: var(--bg-primary);
-}
-.bg-secondary {
-  background-color: var(--bg-secondary);
-}
-.bg-tertiary {
-  background-color: var(--bg-tertiary);
-}
-
-.text-primary {
-  color: var(--text-primary);
-}
-.text-secondary {
-  color: var(--text-secondary);
-}
-.text-tertiary {
-  color: var(--text-tertiary);
+/* Tour specific styles */
+@keyframes pulse-tour {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(13, 138, 241, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(13, 138, 241, 0);
+  }
 }
 
-.border-light {
-  border-color: var(--border-light);
-}
-.border-medium {
-  border-color: var(--border-medium);
-}
-
-.card {
-  background-color: var(--card-bg);
+/* Only apply the highlight effect when the tour-highlight class is present */
+.tour-highlight {
+  animation: pulse-tour 2s infinite;
   border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
+  position: relative;
+  z-index: 1000;
 }
 
-.btn-primary {
-  background-color: var(--primary-600);
-  color: white;
+/* Remove the highlight class from all elements by default */
+.welcome-section,
+.account-overview,
+.chart-container,
+.goals-section,
+.recent-activity,
+.tips-section,
+.quick-actions,
+.sidebar-toggle {
+  animation: none !important;
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-700);
+/* Mobile tour adjustments */
+@media (max-width: 768px) {
+  .react-joyride__tooltip {
+    max-width: 90vw !important;
+    margin: 10px !important;
+  }
+  
+  .react-joyride__beacon {
+    z-index: 10001 !important;
+  }
 }
 
-.chart-income {
-  color: var(--success-500);
+/* Ensure tour elements are above other content */
+.react-joyride__overlay {
+  z-index: 9999 !important;
 }
 
-.chart-expense {
-  color: var(--error-500);
-}
-
-.chart-savings {
-  color: var(--primary-500);
-}
-
-.mobile-nav-panel {
-  will-change: transform;
-}
-
-.mobile-nav-overlay {
-  will-change: opacity;
-}
-
-.mobile-nav-item {
-  will-change: transform, opacity;
+.react-joyride__tooltip {
+  z-index: 10000 !important;
 }

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { getCookie, setCookie, deleteCookie } from "cookies-next";
-import { User } from "@/types.ts/userTypes";
+import { User } from "@/types/userTypes";
 
 interface AuthState {
   accessToken: string | null;

@@ -6,9 +6,9 @@ export default function Logo() {
   return (
     <Link href={"/"} className="flex items-center">
       <div className="text-[var(--primary-500)] rounded-lg flex items-center justify-center">
-        <Scale className="h-6 w-6 text-[var(--primary-500)]" />
+        {/* <Scale className="h-6 w-6 text-[var(--primary-500)]" /> */}
       </div>
-      <span className="text-2xl font-bold text-[var(--primary-500)] italic">
+      <span className="text-2xl font-bold text-[var(--primary-500)] i talic">
         B.IQ
       </span>
     </Link>

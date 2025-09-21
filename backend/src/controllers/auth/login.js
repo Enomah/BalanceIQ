@@ -59,6 +59,7 @@ export const login = async (req, res) => {
         email: user.email,
         isVerified: user.isVerified,
         avatar: user.avatar,
+        currency: user.currency,
       },
       accessToken: token,
     });
