@@ -27,8 +27,6 @@ const Navbar: React.FC = ({}) => {
   const { isSignedIn } = useAuthStore();
   const pathname = usePathname();
 
-  console.log(pathname);
-
   const mainNavItems: NavItem[] = [
     { href: "/", label: "Home", icon: <Home /> },
     { href: "/about", label: "About", icon: <Info /> },

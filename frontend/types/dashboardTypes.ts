@@ -2,46 +2,29 @@ export interface MonthlySummary {
   income: number;
   expenses: number;
   balance: number;
-  incomeCategoryTotals: {
-    salary: number;
-    freelance: number;
-    investment: number;
-    gift: number;
-    business: number;
-    rental: number;
-    others: number;
-  };
-  expenseCategoryTotals: {
-    food: number;
-    transport: number;
-    accommodation: number;
-    utilities: number;
-    entertainment: number;
-    healthcare: number;
-    education: number;
-    shopping: number;
-    others: number;
-  };
-  startOfMonth: string;
-  endOfMonth: string;
+  incomeCategoryTotals: Record<string, number>,
+  expenseCategoryTotals:Record<string, number>
+  startOfMonth?: string;
+  endOfMonth?: string;
 }
 
 export interface Goal {
+  targetDate: any;
   id: string;
   title: string;
   targetAmount: number;
   currentAmount: number;
   progress: number;
-  status: 'Active' | 'Completed' | 'Archived';
+  status: 'active' | 'completed' | 'archived' | "paused";
 }
 
 export interface Transaction {
   id: string;
   description: string;
   amount: number;
-  type: 'income' | 'expense';
-  date: string;
+  type: 'income' | 'expense' | 'savings';
   category: string;
+  createdAt: string;
 }
 
 export interface DashboardStats {

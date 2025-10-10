@@ -13,13 +13,17 @@ const incomeSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    source: {
+    category: {
       type: String,
       enum: defaultIncomeSources,
       default: "others",
     },
     description: {
       type: String,
+      default: "",
+    },
+    date: {
+      type: Date,
       default: "",
     },
   },

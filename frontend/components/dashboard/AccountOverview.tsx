@@ -24,9 +24,9 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({
           {userProfile?.currency}
           {monthlySummary.income.toLocaleString()}
         </div>
-        <div className="text-sm text-[var(--success-600)] dark:text-[var(--success-400)] font-medium">
+        {/* <div className="text-sm text-[var(--success-600)] dark:text-[var(--success-400)] font-medium">
           +2.5% from last month
-        </div>
+        </div> */}
       </div>
 
       <div className="overview-card bg-[var(--bg-secondary)] sm:p-6 p-[10px]  sm:rounded-xl shadow-sm transition-transform hover:scale-[1.02]">
@@ -40,9 +40,9 @@ const AccountOverview: React.FC<AccountOverviewProps> = ({
           {userProfile?.currency}
           {monthlySummary.balance.toLocaleString()}
         </div>
-        <div className="text-sm text-[var(--success-600)] dark:text-[var(--success-400)] font-medium">
+        {/* <div className="text-sm text-[var(--success-600)] dark:text-[var(--success-400)] font-medium">
           +15% from last month
-        </div>
+        </div> */}
       </div>
 
       <div className="overview-card bg-[var(--bg-secondary)] sm:p-6 p-[10px]  sm:rounded-xl shadow-sm transition-transform hover:scale-[1.02]">

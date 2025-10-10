@@ -96,27 +96,51 @@ const FinancialBasicsStep: React.FC<FinancialBasicsStepProps> = ({
         </div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-      >
-        <label className="block text-sm font-medium text-[var(--primary-50)] mb-2">
-          Monthly income
-        </label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)]">
-            {formData.currency}
-          </span>
-          <input
-            type="number"
-            value={formData.monthlyIncome}
-            onChange={(e) => onChange("monthlyIncome", e.target.value)}
-            placeholder="0.00"
-            className="w-full pl-[50px] pr-3 py-3 border border-[var(--border-medium)] rounded-xl focus:ring-2 text-[var(--primary-50)] focus:ring-[var(--primary-500)] focus:border-transparent"
-          />
-        </div>
-      </motion.div>
+      <div className="grid sm:grid-cols-2 gap-[10px]">
+        {" "}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          <label className="block text-sm font-medium text-[var(--primary-50)] mb-2">
+            Monthly income
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)]">
+              {formData.currency}
+            </span>
+            <input
+              type="number"
+              value={formData.monthlyIncome}
+              onChange={(e) => onChange("monthlyIncome", e.target.value)}
+              placeholder="0.00"
+              className="w-full pl-[50px] pr-3 py-3 border border-[var(--border-medium)] rounded-xl focus:ring-2 text-[var(--primary-50)] focus:ring-[var(--primary-500)] focus:border-transparent"
+            />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          <label className="block text-sm font-medium text-[var(--primary-50)] mb-2">
+            Current balance
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)]">
+              {formData.currency}
+            </span>
+            <input
+              type="number"
+              value={formData.accountBalance}
+              onChange={(e) => onChange("accountBalance", e.target.value)}
+              placeholder="0.00"
+              className="w-full pl-[50px] pr-3 py-3 border border-[var(--border-medium)] rounded-xl focus:ring-2 text-[var(--primary-50)] focus:ring-[var(--primary-500)] focus:border-transparent"
+            />
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };

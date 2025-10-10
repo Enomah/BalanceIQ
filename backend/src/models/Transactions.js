@@ -7,12 +7,19 @@ const transactionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    type: { type: String, enum: ["income", "expense"] },
-    amount: { type: Number },
-    category: { type: String },
-    description: { type: String },
+    type: { type: String, enum: ["income", "expense", "savings"] },
+    amount: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    category: { type: String, default: "others" },
+    description: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Transactions", transactionSchema)
+export default mongoose.model("Transaction", transactionSchema);

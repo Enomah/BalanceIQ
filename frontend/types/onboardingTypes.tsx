@@ -3,6 +3,7 @@ interface OnboardingFormData {
   currency: string;
   monthlyIncome: string;
   incomeSource: string;
+  accountBalance: string;
   primaryGoal: string;
   targetAmount: string;
   targetDate: string;

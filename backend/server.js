@@ -2,9 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRoutes from "./src/routes/authRoutes.js"
-import onboardingRoutes from "./src/routes/onboardingRoutes.js"
-import dashboardRoutes from "./src/routes/dashboardRoutes.js"
+import authRoutes from "./src/routes/authRoutes.js";
+import onboardingRoutes from "./src/routes/onboardingRoutes.js";
+import dashboardRoutes from "./src/routes/dashboardRoutes.js";
+import { errorHandler } from "./src/middleware/errorHandler.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec, swaggerUiOptions } from "./src/config/swagger.js";
 
 dotenv.config();
 
@@ -16,6 +19,9 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/onboarding", onboardingRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
+
+app.use(errorHandler);
 
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

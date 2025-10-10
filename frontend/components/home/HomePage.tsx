@@ -37,6 +37,9 @@ export default function HomePage() {
   const scrollToSection = (ref: { current: { scrollIntoView: (arg0: { behavior: string; }) => void; }; }) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
+  
+  // const text = ``  
+  // console.log(text)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary-50)] to-[var(--primary-100)] dark:from-[var(--neutral-950)] dark:to-[var(--primary-900)] transition-colors duration-300">

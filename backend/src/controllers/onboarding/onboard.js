@@ -14,7 +14,10 @@ export const onboard = async (req, res) => {
       targetDate,
       spendingCategories,
       budgetingStyle,
+      accountBalance,
     } = req.body;
+
+    console.log(accountBalance)
 
     let avatarUrl = null;
     if (req.file) {
@@ -45,6 +48,7 @@ export const onboard = async (req, res) => {
         currency,
         monthlyIncome,
         incomeSource,
+        accountBalance,
         spendingCategories: categories,
       },
       { new: true }

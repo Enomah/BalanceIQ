@@ -1,7 +1,5 @@
-// Dashboard.tsx
 "use client";
 
-import { baseUrl } from "@/api/rootUrls";
 import { useAuthStore } from "@/store/authStore";
 import React, { useEffect, useState } from "react";
 import {
@@ -15,37 +13,32 @@ import {
   LogOut,
 } from "lucide-react";
 
-import { DashboardData, MenuItem } from "@/types/dashboardTypes";
+import { MenuItem } from "@/types/dashboardTypes"; 
 import SkeletonLoader from "./SkeletonLoader";
 import Sidebar from "./Sidebar";
 import WelcomeSection from "./WelcomeSection";
 import AccountOverview from "./AccountOverview";
 import ChartsSection from "./ChartsSection";
-import GoalsSection from "./GoalsSection";
+import GoalsSection from "../goals/display/GoalsSection";
 import RecentActivity from "./RecentActivity";
-import FinancialTips from "./FinancialTips";
-import QuickActions from "./QuickActions";
+// import FinancialTips from "./FinancialTips";
+// import QuickActions from "./QuickActions";
 import { getLocalStorage, setLocalStorage } from "@/lib/storage";
 import DashboardTour from "./Dashboardtour";
 import TourTrigger from "./TourTrigger";
+import { useDashboardStore } from "@/store/dashboardStore";
 
 const Dashboard: React.FC = () => {
-  const { accessToken, userProfile, logout } = useAuthStore();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null
-  );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { userProfile, logout } = useAuthStore();
+  const { dashboardData, loading, error, fetchDashboard } = useDashboardStore();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
   const [currentPath, setCurrentPath] = useState<string>("/dashboard");
   const [showTour, setShowTour] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(false);
 
-  // Check if user has seen the tour before
   useEffect(() => {
     const tourSeen = getLocalStorage("dashboardTourSeen");
     if (!tourSeen) {
-      // Show tour after a short delay when dashboard loads
       const timer = setTimeout(() => {
         setShowTour(true);
       }, 1500);
@@ -106,31 +99,6 @@ const Dashboard: React.FC = () => {
       isDestructive: true,
     },
   ];
-
-  const fetchDashboard = async (): Promise<void> => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${baseUrl}/dashboard`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const data: DashboardData = await response.json();
-      console.log(data);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      setDashboardData(data);
-    } catch (error) {
-      console.error("Fetch error:", error);
-      setError("Failed to load dashboard");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleTourClose = () => {
     setShowTour(false);
@@ -206,13 +174,14 @@ const Dashboard: React.FC = () => {
       <div className="flex-1 overflow-y-auto sm:p-6">
         <WelcomeSection userProfile={userProfile} />
         <AccountOverview monthlySummary={monthlySummary} />
-        <ChartsSection monthlySummary={monthlySummary} />
+        {/* <ChartsSection monthlySummary={monthlySummary} /> */}
 
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-[10px] sm:gap-6 mb-[10px] sm:mb-6">
           <GoalsSection activeGoals={activeGoals} />
           <RecentActivity recentTransactions={recentTransactions} />
         </section>
 
+        {/* Uncomment if needed
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-[10px] sm:gap-6">
           <FinancialTips
             monthlySummary={monthlySummary}
@@ -220,6 +189,7 @@ const Dashboard: React.FC = () => {
           />
           <QuickActions />
         </section>
+        */}
 
         <DashboardTour isOpen={showTour} onClose={handleTourClose} />
 

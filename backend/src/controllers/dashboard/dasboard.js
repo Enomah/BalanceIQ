@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import User from "../../models/Users.js";
 import Goal from "../../models/Goals.js";
 import Income from "../../models/Incomes.js";
 import Expense from "../../models/Expenses.js";
+import Transaction from "../../models/Transactions.js";
 import {
   defaultExpenseCategories,
   defaultIncomeSources,
@@ -12,9 +14,12 @@ export const getDashboardData = async (req, res) => {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
+
     // 1) Load user profile (lean for performance)
     const user = await User.findById(userId).lean();
     if (!user) return res.status(404).json({ message: "User not found" });
+
+    // console.log(MonthlySummary)
 
     // 2) Compute month bounds (server local time)
     const now = new Date();
@@ -38,7 +43,7 @@ export const getDashboardData = async (req, res) => {
     );
 
     // Convert userId to ObjectId for aggregate queries
-    const oid = userId;
+    const oid = new mongoose.Types.ObjectId(userId);
 
     // 3) Aggregate monthly income
     const incomeAgg = await Income.aggregate([
@@ -50,7 +55,7 @@ export const getDashboardData = async (req, res) => {
       },
       { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
-    const income = incomeAgg[0]?.total || user.monthlyIncome || 0;
+    const income =  incomeAgg[0]?.total || 0;
 
     // 4) Aggregate monthly expenses
     const expenseAgg = await Expense.aggregate([
@@ -73,10 +78,13 @@ export const getDashboardData = async (req, res) => {
           createdAt: { $gte: startOfMonth, $lt: startOfNextMonth },
         },
       },
-      { $group: { _id: "$source", total: { $sum: "$amount" } } },
+      { $group: { _id: "$category", total: { $sum: "$amount" } } },
       { $sort: { total: -1 } },
       { $limit: 12 },
     ]);
+
+    // console.log(incomeCategoriesAgg)
+
     const incomeCategoryTotals = {};
     for (const c of incomeCategoriesAgg) {
       incomeCategoryTotals[c._id || "others"] = c.total;
@@ -86,6 +94,8 @@ export const getDashboardData = async (req, res) => {
         incomeCategoryTotals[src] = 0;
       }
     }
+
+    // console.log(defaultIncomeSources)
 
     // 6) Expense category breakdown
     const expenseCategoriesAgg = await Expense.aggregate([
@@ -99,55 +109,41 @@ export const getDashboardData = async (req, res) => {
       { $sort: { total: -1 } },
       { $limit: 12 },
     ]);
+    // console.log(expenseCategoriesAgg)
     const expenseCategoryTotals = {};
     for (const c of expenseCategoriesAgg) {
       expenseCategoryTotals[c._id || "others"] = c.total;
     }
-
     for (const cat of defaultExpenseCategories) {
       if (!(cat in expenseCategoryTotals)) {
         expenseCategoryTotals[cat] = 0;
       }
     }
 
-    // 7) Recent transactions (combine Income and Expense, newest first)
-    const recentIncome = await Income.find({
-      userId: userId,
+    // 7) Fetch all monthly income records
+    const monthlyIncomes = await Income.find({
+      userId: oid,
       createdAt: { $gte: startOfMonth, $lt: startOfNextMonth },
     })
       .sort({ createdAt: -1 })
-      .limit(6)
       .lean();
-    const recentExpenses = await Expense.find({
-      userId: userId,
+
+    // 8) Fetch all monthly expense records
+    const monthlyExpenses = await Expense.find({
+      userId: oid,
       createdAt: { $gte: startOfMonth, $lt: startOfNextMonth },
     })
       .sort({ createdAt: -1 })
-      .limit(6)
       .lean();
 
-    const recentTransactions = [
-      ...recentIncome.map((t) => ({
-        id: t._id,
-        type: "income",
-        amount: t.amount,
-        category: t.source,
-        description: t.description || "",
-        createdAt: t.createdAt,
-      })),
-      ...recentExpenses.map((t) => ({
-        id: t._id,
-        type: "expense",
-        amount: t.amount,
-        category: t.category,
-        description: t.description || "",
-        createdAt: t.createdAt,
-      })),
-    ]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, 6);
+    // 9) Recent transactions from Transaction model (most recent 5)
+    const recentTransactions = await Transaction.find({
+      userId: userId,
+    })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .lean();
 
-    // 8) Goals (all goals, compute progress)
     const allGoals = await Goal.find({ userId }).lean();
     const activeGoals = allGoals
       .filter((g) => {
@@ -171,7 +167,7 @@ export const getDashboardData = async (req, res) => {
         };
       });
 
-    // 9) Stats
+    // 11) Stats
     const transactionsCountThisMonth =
       (await Income.countDocuments({
         userId: userId,
@@ -187,18 +183,19 @@ export const getDashboardData = async (req, res) => {
       (g) => (g.status || "").toLowerCase() === "completed"
     ).length;
 
-    // 10) Package response
+    // 12) Package response
     return res.status(200).json({
-      monthYear: "",
       monthlySummary: {
         income,
         expenses,
-        balance,
+        balance: user.accountBalance,
         incomeCategoryTotals,
         expenseCategoryTotals,
         startOfMonth,
         endOfMonth: startOfNextMonth,
       },
+      monthlyIncomes,
+      monthlyExpenses,
       recentTransactions,
       activeGoals,
       stats: {

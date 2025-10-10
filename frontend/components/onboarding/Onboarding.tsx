@@ -23,6 +23,7 @@ export default function Onboarding() {
     currency: "USD",
     monthlyIncome: "",
     incomeSource: "Salary",
+    accountBalance: "",
     primaryGoal: "emergency fund",
     targetAmount: "",
     targetDate: "",
@@ -74,6 +75,7 @@ export default function Onboarding() {
       JSON.stringify(formData.spendingCategories)
     );
     formDataToSend.append("budgetingStyle", formData.budgetingStyle);
+    formDataToSend.append("accountBalance", formData.accountBalance);
 
     try {
       setIsSubmitting(true);
@@ -108,7 +110,8 @@ export default function Onboarding() {
 
      
       if (data.proceed) {
-        window.location.href = "/dashboard";
+        console.log("proceed")
+        // window.location.href = "/dashboard";
       } else {
         throw new Error(data.message || "Unknown response from server");
       }

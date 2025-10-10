@@ -2,12 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import Joyride, { Step, CallBackProps, STATUS } from 'react-joyride';
 import { X, HelpCircle } from 'lucide-react';
 
-interface DashboardTourProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const DashboardTour: React.FC<DashboardTourProps> = ({ isOpen, onClose }) => {
+const DashboardTour = ({ isOpen, onClose }) => {
   const [run, setRun] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [showWelcome, setShowWelcome] = useState(true);
@@ -25,11 +20,11 @@ const DashboardTour: React.FC<DashboardTourProps> = ({ isOpen, onClose }) => {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  const getTourPlacement = (defaultPlacement: string, mobilePlacement: string) => {
+  const getTourPlacement = (defaultPlacement, mobilePlacement) => {
     return isMobile ? mobilePlacement : defaultPlacement;
   };
 
-  const steps: Step[] = [
+  const steps = [
     {
       target: '.welcome-section',
       content: 'Welcome to your financial dashboard! Here you can see a quick overview of your financial health.',
@@ -124,11 +119,11 @@ const DashboardTour: React.FC<DashboardTourProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  const handleJoyrideCallback = useCallback((data: CallBackProps) => {
+  const handleJoyrideCallback = useCallback((data) => {
     const { status, index, action, type } = data;
     
     // Handle tour completion or skipping
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status as any)) {
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
       setRun(false);
       setStepIndex(0);
       onClose();
