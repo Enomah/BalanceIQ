@@ -71,7 +71,7 @@ const Login: React.FC<LoginFormProps> = ({ onToggleForm }) => {
 
       const data = await response.json();
 
-      // console.log(data);
+      console.log(data, baseUrl);
 
       if (!response.ok) {
         setErrors({

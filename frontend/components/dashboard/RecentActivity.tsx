@@ -2,6 +2,7 @@ import React from 'react';
 import { Transaction } from '@/types/dashboardTypes';
 import TransactionItem from '../transactions/TransactionItem';
 import { CreditCard } from 'lucide-react';
+import Link from 'next/link';
 
 interface RecentActivityProps {
   recentTransactions: Transaction[];
@@ -12,7 +13,7 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ recentTransactions }) =
     <div className="recent-activity bg-[var(--bg-secondary)] p-[10px] sm:p-6 sm:rounded-xl shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-[var(--text-primary)]">Recent Activity</h3>
-        <button className="text-sm text-[var(--primary-600)] dark:text-[var(--primary-400)] hover:underline">View All</button>
+        <Link href={"/dashboard/transactions"} className="text-sm text-[var(--primary-600)] dark:text-[var(--primary-400)] hover:underline">View All</Link>
       </div>
       {recentTransactions.length > 0 ? (
         <div className="space-y-4">

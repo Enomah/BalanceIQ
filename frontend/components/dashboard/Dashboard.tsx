@@ -2,17 +2,6 @@
 
 import { useAuthStore } from "@/store/authStore";
 import React, { useEffect, useState } from "react";
-import {
-  User,
-  ShoppingBag,
-  DollarSign,
-  Lightbulb,
-  Settings,
-  Shield,
-  HelpCircle,
-  LogOut,
-} from "lucide-react";
-
 import { MenuItem } from "@/types/dashboardTypes"; 
 import SkeletonLoader from "./SkeletonLoader";
 import Sidebar from "./Sidebar";
@@ -48,58 +37,6 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  const menuItems: MenuItem[] = [
-    {
-      id: "dashboard",
-      label: "Dashboard",
-      icon: User,
-      href: "/dashboard",
-    },
-    {
-      id: "transactions",
-      label: "Transactions",
-      icon: ShoppingBag,
-      href: "/transactions",
-    },
-    {
-      id: "savings",
-      label: "Savings",
-      icon: DollarSign,
-      href: "/savings",
-    },
-    {
-      id: "insights",
-      label: "Insights",
-      icon: Lightbulb,
-      href: "/insights",
-    },
-    {
-      id: "settings",
-      label: "Settings",
-      icon: Settings,
-      href: "/settings",
-    },
-    {
-      id: "privacy",
-      label: "Privacy & Security",
-      icon: Shield,
-      href: "/privacy",
-    },
-    {
-      id: "help",
-      label: "Help & Support",
-      icon: HelpCircle,
-      href: "/help",
-    },
-    {
-      id: "logout",
-      label: "Sign Out",
-      icon: LogOut,
-      action: logout,
-      isDestructive: true,
-    },
-  ];
-
   const handleTourClose = () => {
     setShowTour(false);
     setLocalStorage("dashboardTourSeen", "true");
@@ -120,7 +57,6 @@ const Dashboard: React.FC = () => {
         <Sidebar
           isCollapsed={isSidebarCollapsed}
           toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          menuItems={menuItems}
           currentPath={currentPath}
           userProfile={userProfile}
         />
@@ -136,7 +72,6 @@ const Dashboard: React.FC = () => {
         <Sidebar
           isCollapsed={isSidebarCollapsed}
           toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          menuItems={menuItems}
           currentPath={currentPath}
           userProfile={userProfile}
         />
@@ -166,7 +101,6 @@ const Dashboard: React.FC = () => {
       <Sidebar
         isCollapsed={isSidebarCollapsed}
         toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-        menuItems={menuItems}
         currentPath={currentPath}
         userProfile={userProfile}
       />
@@ -174,7 +108,7 @@ const Dashboard: React.FC = () => {
       <div className="flex-1 overflow-y-auto sm:p-6">
         <WelcomeSection userProfile={userProfile} />
         <AccountOverview monthlySummary={monthlySummary} />
-        {/* <ChartsSection monthlySummary={monthlySummary} /> */}
+        <ChartsSection monthlySummary={monthlySummary} />
 
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-[10px] sm:gap-6 mb-[10px] sm:mb-6">
           <GoalsSection activeGoals={activeGoals} />

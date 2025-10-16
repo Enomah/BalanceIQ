@@ -1,4 +1,3 @@
-// WelcomeSection.tsx
 import React from 'react';
 import { Bell } from 'lucide-react';
 import { User } from '@/types/userTypes';

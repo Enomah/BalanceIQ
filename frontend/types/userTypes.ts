@@ -6,4 +6,5 @@ export interface User {
     nickname: string;
     isVerified: string;
     currency: string;
+    createdAt: string;
 }

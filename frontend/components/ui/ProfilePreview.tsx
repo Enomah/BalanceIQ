@@ -13,11 +13,15 @@ import {
   DollarSign,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function ProfilePreview() {
   const { userProfile, isSignedIn, logout } = useAuthStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -57,37 +61,37 @@ export default function ProfilePreview() {
       id: "transactions",
       label: "Transactions",
       icon: ShoppingBag,
-      href: "/transactions",
+      href: "/dashboard/transactions",
     },
     {
       id: "savings",
       label: "Savings",
       icon: DollarSign,
-      href: "/savings",
+      href: "/dashboard/savings",
     },
     {
       id: "insights",
       label: "Insights",
       icon: Lightbulb,
-      href: "/insights",
+      href: "/dashboard/insights",
     },
     {
       id: "settings",
       label: "Settings",
       icon: Settings,
-      href: "/settings",
+      href: "/dashboard/settings",
     },
     {
       id: "privacy",
       label: "Privacy & Security",
       icon: Shield,
-      href: "/privacy",
+      href: "/dashboard/privacy",
     },
     {
       id: "help",
       label: "Help & Support",
       icon: HelpCircle,
-      href: "/help",
+      href: "/dashboard/help",
     },
     {
       id: "logout",
@@ -99,7 +103,7 @@ export default function ProfilePreview() {
   ];
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative z-[1000]" ref={dropdownRef}>
       <button
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         className="flex items-center space-x-2 p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors group"
@@ -143,7 +147,7 @@ export default function ProfilePreview() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute right-0 top-full mt-2 w-64 bg-[var(--card-bg)] rounded-xl shadow-lg border border-[var(--border-light)] z-50 overflow-hidden"
+            className="absolute left-0 top-full mt-2 w-64 bg-[var(--card-bg)] rounded-xl shadow-lg border border-[var(--border-light)] z-50 overflow-hidden"
           >
             <div className="p-4 border-b border-[var(--border-light)]">
               <div className="flex items-center space-x-3">
@@ -187,6 +191,13 @@ export default function ProfilePreview() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
+                    className={`${
+                      pathname === item.href ? "bg-[var(--bg-secondary)]" : ""
+                    } ${
+                      item.isDestructive
+                        ? "hover:bg-[var(--error-50)]"
+                        : "hover:bg-[var(--bg-tertiary)]"
+                    }`}
                   >
                     {item.action ? (
                       <button
@@ -206,16 +217,16 @@ export default function ProfilePreview() {
                         </span>
                       </button>
                     ) : (
-                      <a
-                        href={item.href}
-                        onClick={() => setIsDropdownOpen(false)}
+                      <Link
+                        href={item.href || "#"}
+                        onClick={item.action}
                         className="w-full flex items-center space-x-3 px-4 py-3 text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--primary-600)] transition-colors"
                       >
                         <IconComponent className="h-4 w-4" />
                         <span className="text-sm font-medium">
                           {item.label}
                         </span>
-                      </a>
+                      </Link>
                     )}
                   </motion.div>
                 );

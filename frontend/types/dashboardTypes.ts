@@ -2,8 +2,8 @@ export interface MonthlySummary {
   income: number;
   expenses: number;
   balance: number;
-  incomeCategoryTotals: Record<string, number>,
-  expenseCategoryTotals:Record<string, number>
+  incomeCategoryTotals: Record<string, number>;
+  expenseCategoryTotals: Record<string, number>;
   startOfMonth?: string;
   endOfMonth?: string;
 }
@@ -15,14 +15,14 @@ export interface Goal {
   targetAmount: number;
   currentAmount: number;
   progress: number;
-  status: 'active' | 'completed' | 'archived' | "paused";
+  status: "active" | "completed" | "archived" | "paused";
 }
 
 export interface Transaction {
   id: string;
   description: string;
   amount: number;
-  type: 'income' | 'expense' | 'savings';
+  type: "income" | "expense" | "savings";
   category: string;
   createdAt: string;
 }
@@ -47,4 +47,30 @@ export interface MenuItem {
   href?: string;
   action?: () => void;
   isDestructive?: boolean;
+}
+
+export interface MonthYearGroup {
+  year: number;
+  month: number;
+  monthName: string;
+  transactions: Transaction[];
+}
+
+export interface TransactionsResponse {
+  count: number;
+  next: string | null;
+  prev: string | null;
+  current_page: number;
+  total_pages: number;
+  page_size: number;
+  content: Transaction[];
+}
+
+export interface FetchTransactionsParams {
+  page?: number;
+  limit?: number;
+  startDate?: string;
+  endDate?: string;
+  type?: "income" | "expense" | "savings";
+  category?: string;
 }
