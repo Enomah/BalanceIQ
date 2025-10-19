@@ -2,6 +2,7 @@ import React from "react";
 import { TrendingUp, TrendingDown, Wallet, CreditCard } from "lucide-react";
 import { Transaction } from "@/types/dashboardTypes";
 import { useAuthStore } from "@/store/authStore";
+import { formatCurrency } from "@/lib/format";
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -62,8 +63,8 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
       </div>
       <div className={`font-medium ${text}`}>
         {prefix}
-        {userProfile?.currency}
-        {transaction.amount.toLocaleString()}
+
+        {userProfile && formatCurrency(transaction.amount, userProfile?.currency)}
       </div>
     </div>
   );

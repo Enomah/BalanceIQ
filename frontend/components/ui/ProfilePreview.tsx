@@ -147,7 +147,7 @@ export default function ProfilePreview() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute left-0 top-full mt-2 w-64 bg-[var(--card-bg)] rounded-xl shadow-lg border border-[var(--border-light)] z-50 overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-64 bg-[var(--card-bg)] rounded-xl shadow-lg border border-[var(--border-light)] z-50 overflow-hidden"
           >
             <div className="p-4 border-b border-[var(--border-light)]">
               <div className="flex items-center space-x-3">

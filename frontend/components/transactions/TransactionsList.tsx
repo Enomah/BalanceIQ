@@ -48,7 +48,7 @@ export default function TransactionsList({
     };
   }, [handleObserver, hasMore]);
 
-  console.log('Rendering TransactionsList with groupedTransactions:', groupedTransactions);
+  // console.log("Rendering TransactionsList with groups:", groupedTransactions);
 
   return (
     <>
@@ -68,7 +68,7 @@ export default function TransactionsList({
                   {group.monthName} {group.year}
                 </h2>
               </div>
-              <Link href={`/dashboard/summary?month=${group.month}&year=${group.year}`} className="ml-4 px-3 py-1 bg-[var(--bg-tertiary)] rounded-full">
+              <Link href={`/dashboard/summary?month=${group.month+1}&year=${group.year}`} className="ml-4 px-3 py-1 bg-[var(--bg-tertiary)] rounded-full">
                 <div className="text-sm font-medium text-[var(--text-secondary)] flex items-center gap-1">
                   View summary <ArrowRight size={18}/>
                 </div>

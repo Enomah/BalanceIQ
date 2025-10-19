@@ -1,12 +1,5 @@
 "use client";
-
-import { useState } from "react";
-import Sidebar from "../dashboard/Sidebar";
-import { useAuthStore } from "@/store/authStore";
-
 export default function LoadingState() {
-  const { userProfile } = useAuthStore();
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
