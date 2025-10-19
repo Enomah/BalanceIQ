@@ -14,7 +14,6 @@ export const getDashboardData = async (req, res) => {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-
     // 1) Load user profile (lean for performance)
     const user = await User.findById(userId).lean();
     if (!user) return res.status(404).json({ message: "User not found" });
