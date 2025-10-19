@@ -14,7 +14,7 @@ import {
 } from "recharts";
 import { PieChart as PieChartIcon, Plus } from "lucide-react";
 import { MonthlySummary } from "@/types/dashboardTypes";
-import { User } from "@/types/userTypes"; 
+import { User } from "@/types/userTypes";
 import AddExpenseModal from "./AddExpenseModal";
 
 interface ExpenseBreakdownProps {
@@ -56,7 +56,7 @@ const ExpenseBreakdown: React.FC<ExpenseBreakdownProps> = ({
   };
 
   return (
-    <div className="chart-container bg-[var(--bg-secondary)] p-[10px] md:p-6 md:rounded-xl shadow-sm">
+    <div className="chart-container bg-[var(--bg-secondary)] p-[10px] md:p-6 rounded-xl shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-semibold text-[var(--text-primary)]">
           Expense Breakdown
@@ -96,13 +96,11 @@ const ExpenseBreakdown: React.FC<ExpenseBreakdownProps> = ({
                   outerRadius={80}
                   paddingAngle={2}
                   dataKey="value"
-                  label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                  label={(props: any) =>
+                    `${(((props as any).percent ?? 0) * 100).toFixed(0)}%`
+                  }
                   labelLine={false}
-                >
-                  {expenseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
+                ></Pie>{" "}
                 <Tooltip content={<CustomTooltip />} />
                 <Legend
                   layout="vertical"
@@ -127,7 +125,7 @@ const ExpenseBreakdown: React.FC<ExpenseBreakdownProps> = ({
           <p className="text-sm text-center mb-6">
             Start tracking your expenses to see your spending patterns
           </p>
-          <AddExpenseModal/>
+          <AddExpenseModal />
         </div>
       )}
     </div>

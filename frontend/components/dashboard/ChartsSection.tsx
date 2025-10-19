@@ -40,7 +40,7 @@ const ChartsSection: React.FC<ChartsSectionProps> = ({ monthlySummary }) => {
   return (
     <>
       <section className="charts-section grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="chart-container bg-[var(--bg-secondary)] p-[10px] md:p-6 md:rounded-xl shadow-sm">
+        <div className="chart-container bg-[var(--bg-secondary)] p-[10px] md:p-6 rounded-xl shadow-sm">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-lg font-semibold text-[var(--text-primary)]">Financial Insights</h3>
             <AddIncomeModal/>

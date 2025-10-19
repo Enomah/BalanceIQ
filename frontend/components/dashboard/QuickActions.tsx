@@ -6,7 +6,7 @@ import AddGoalModal from '../goals/create/AddGoalModal';
 
 const QuickActions: React.FC = () => {
   return (
-    <div className="quick-actions bg-[var(--bg-secondary)] p-[10px] sm:p-6 sm:rounded-xl shadow-sm">
+    <div className="quick-actions bg-[var(--bg-secondary)] p-[10px] sm:p-6 rounded-xl shadow-sm">
       <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-[10px] sm:mb-6">Quick Actions</h3>
       
       <div className="space-y-3">

@@ -10,7 +10,7 @@ interface FinancialTipsProps {
 
 const FinancialTips: React.FC<FinancialTipsProps> = ({ monthlySummary, activeGoals }) => {
   return (
-    <div className="tips-section bg-[var(--bg-secondary)] p-[10px] sm:p-6 sm:rounded-xl shadow-sm lg:col-span-2">
+    <div className="tips-section bg-[var(--bg-secondary)] p-[10px] sm:p-6 rounded-xl shadow-sm lg:col-span-2">
       <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-[10px] sm:mb-6">Financial Tips</h3>
       
       <div className="tip-card p-4 bg-[var(--primary-50)] dark:bg-[var(--primary-900)] rounded-lg mb-4">

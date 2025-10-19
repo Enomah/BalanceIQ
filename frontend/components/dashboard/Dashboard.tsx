@@ -2,9 +2,9 @@
 
 import { useAuthStore } from "@/store/authStore";
 import React, { useEffect, useState } from "react";
-import { MenuItem } from "@/types/dashboardTypes"; 
+import { MenuItem } from "@/types/dashboardTypes";
 import SkeletonLoader from "./SkeletonLoader";
-import Sidebar from "./Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 import WelcomeSection from "./WelcomeSection";
 import AccountOverview from "./AccountOverview";
 import ChartsSection from "./ChartsSection";
@@ -51,71 +51,48 @@ const Dashboard: React.FC = () => {
     fetchDashboard();
   }, []);
 
-  if (loading)
-    return (
-      <div className="flex h-screen bg-[var(--bg-primary)]">
-        <Sidebar
-          isCollapsed={isSidebarCollapsed}
-          toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          currentPath={currentPath}
-          userProfile={userProfile}
-        />
-        <div className="flex-1 overflow-y-auto">
-          <SkeletonLoader />
-        </div>
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="flex h-screen bg-[var(--bg-primary)]">
-        <Sidebar
-          isCollapsed={isSidebarCollapsed}
-          toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          currentPath={currentPath}
-          userProfile={userProfile}
-        />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center p-6 bg-[var(--bg-secondary)] rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
-              Error Loading Dashboard
-            </h2>
-            <p className="text-[var(--text-secondary)] mb-4">{error}</p>
-            <button
-              onClick={fetchDashboard}
-              className="px-4 py-2 bg-[var(--primary-500)] text-white rounded-lg hover:bg-[var(--primary-600)] transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-
   if (!dashboardData) return null;
 
   const { monthlySummary, recentTransactions, activeGoals } = dashboardData;
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
-      <Sidebar
-        isCollapsed={isSidebarCollapsed}
-        toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-        currentPath={currentPath}
-        userProfile={userProfile}
-      />
+      <Sidebar currentPath={currentPath} userProfile={userProfile} />
 
-      <div className="flex-1 overflow-y-auto sm:p-6">
-        <WelcomeSection userProfile={userProfile} />
-        <AccountOverview monthlySummary={monthlySummary} />
-        <ChartsSection monthlySummary={monthlySummary} />
+      <div className="flex-1 overflow-y-auto">
+        <div className="mx-auto">
+          <div className="sticky z-[100] top-0 left-0">
+            <WelcomeSection userProfile={userProfile} />
+          </div>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-[10px] sm:gap-6 mb-[10px] sm:mb-6">
-          <GoalsSection activeGoals={activeGoals} />
-          <RecentActivity recentTransactions={recentTransactions} />
-        </section>
+          {error ? (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center p-6 bg-[var(--bg-secondary)] rounded-xl shadow-sm">
+                <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
+                  Error Loading Dashboard
+                </h2>
+                <p className="text-[var(--text-secondary)] mb-4">{error}</p>
+                <button
+                  onClick={fetchDashboard}
+                  className="px-4 py-2 bg-[var(--primary-500)] text-white rounded-lg hover:bg-[var(--primary-600)] transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          ) : loading && !dashboardData ? (
+            <SkeletonLoader />
+          ) : (
+            <div className="px-[10px] sm:px-6 pb-[20px]">
+              <AccountOverview monthlySummary={monthlySummary} />
+              <ChartsSection monthlySummary={monthlySummary} />
 
-        {/* Uncomment if needed
+              <section className="grid grid-cols-1 lg:grid-cols-2 gap-[10px] sm:gap-6 mb-[10px] sm:mb-6">
+                <GoalsSection activeGoals={activeGoals} />
+                <RecentActivity recentTransactions={recentTransactions} />
+              </section>
+
+              {/* Uncomment if needed
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-[10px] sm:gap-6">
           <FinancialTips
             monthlySummary={monthlySummary}
@@ -125,11 +102,17 @@ const Dashboard: React.FC = () => {
         </section>
         */}
 
-        <DashboardTour isOpen={showTour} onClose={handleTourClose} />
+              <DashboardTour isOpen={showTour} onClose={handleTourClose} />
+            </div>
+          )}
 
-        {hasSeenTour && (
-          <TourTrigger onClick={handleTourOpen} className="bottom-6 right-6" />
-        )}
+          {hasSeenTour && (
+            <TourTrigger
+              onClick={handleTourOpen}
+              className="bottom-6 right-6"
+            />
+          )}
+        </div>
       </div>
     </div>
   );
