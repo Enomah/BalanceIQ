@@ -30,7 +30,7 @@ const GoalsSection: React.FC<GoalsSectionProps> = ({ activeGoals }) => {
   const completedGoals = goals.filter(goal => goal.progress >= 100);
 
   return (
-    <div className="goals-section bg-[var(--bg-secondary)] p-[10px] sm:p-6 sm:rounded-xl shadow-sm">
+    <div className="goals-section bg-[var(--bg-secondary)] p-[10px] sm:p-6 rounded-xl shadow-sm">
       <div className="flex justify-between items-start gap-[10px] mb-6 flex-col">
         <div className='flex items-center justify-between w-full'>
          <div className=""> <h3 className="text-lg font-semibold text-[var(--text-primary)]">Your active Financial Goals</h3>
