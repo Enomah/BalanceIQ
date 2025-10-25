@@ -52,7 +52,6 @@ const GoalsSection: React.FC<GoalsSectionProps> = ({ activeGoals }) => {
             <GoalItem
               key={goal.id}
               goal={goal}
-              // onGoalComplete={handleGoalComplete}
               onGoalRemove={handleGoalRemove}
             />
           ))}

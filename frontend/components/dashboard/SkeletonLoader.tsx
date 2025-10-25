@@ -1,18 +1,7 @@
 import React from 'react';
 
 const SkeletonLoader: React.FC = () => (
-  <div className="skeleton-container p-6">
-    <div className="skeleton-header flex justify-between items-center mb-8">
-      <div className="flex items-center space-x-4">
-        <div className="w-12 h-12 bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] rounded-full animate-pulse"></div>
-        <div>
-          <div className="h-6 w-40 bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] rounded animate-pulse mb-2"></div>
-          <div className="h-4 w-60 bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] rounded animate-pulse"></div>
-        </div>
-      </div>
-      <div className="h-10 w-10 bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] rounded-full animate-pulse"></div>
-    </div>
-    
+  <div className="skeleton-container px-[10px] sm:px-6">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       {[...Array(3)].map((_, i) => (
         <div key={i} className="bg-[var(--bg-secondary)] p-6 rounded-xl shadow-sm animate-pulse">

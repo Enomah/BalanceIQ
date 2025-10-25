@@ -4,6 +4,7 @@ import { Goal, MonthlySummary, Transaction } from "@/types/dashboardTypes";
 import { useAuthStore } from "@/store/authStore";
 import { baseUrl } from "@/api/rootUrls";
 import { useDashboardStore } from "@/store/dashboardStore";
+import { useGoalStore } from "@/store/goalsStore";
 
 interface GoalFundingProps {
   goal: Goal;
@@ -25,19 +26,10 @@ const GoalFunding: React.FC<GoalFundingProps> = ({
   const [fundAmount, setFundAmount] = useState("");
   const [submitError, setSubmitError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showCompletionCelebration, setShowCompletionCelebration] =
-    useState(false);
   const { userProfile, accessToken } = useAuthStore();
   const { updateMonthlySummary, dashboardData, addRecentTransaction } =
     useDashboardStore();
-
-  useEffect(() => {
-    if (localGoal.progress >= 100 && goal.progress < 100) {
-      setShowCompletionCelebration(true);
-      setTimeout(() => setShowCompletionCelebration(false), 3000);
-      onGoalComplete?.(localGoal.id);
-    }
-  }, [localGoal.progress, goal.progress, localGoal.id, onGoalComplete]);
+  const { setStats, stats } = useGoalStore();
 
   const handleFundGoal = async () => {
     setSubmitError("");
@@ -74,7 +66,7 @@ const GoalFunding: React.FC<GoalFundingProps> = ({
 
       const data = await response.json();
 
-      console.log(data);
+      // console.log(goal);
 
       if (!response.ok) {
         throw new Error(
@@ -90,6 +82,29 @@ const GoalFunding: React.FC<GoalFundingProps> = ({
       });
       setFundAmount("");
       setShowFundInput(false);
+
+      // console.log(data.goal.status)
+
+      if (data.goal.status === "completed") {
+        console.log("completed")
+        const updatedStats = {
+          totalGoals: stats.totalGoals,
+          totalActive: stats.totalActive -= 1,
+          totalTarget: stats.totalTarget,
+          totalSaved: stats.totalSaved,
+        };
+
+        setStats(updatedStats);
+      }
+
+      const updatedStats = {
+        totalGoals: stats.totalGoals,
+        totalActive: stats.totalActive,
+        totalTarget: stats.totalTarget,
+        totalSaved: (stats.totalSaved += parsedAmount),
+      };
+
+      setStats(updatedStats);
 
       if (dashboardData) {
         const transaction: Transaction = {

@@ -12,8 +12,6 @@ export const fundGoal = async (req, res) => {
     const goalId = req.params.id;
     const userId = req.user?.id;
 
-    // console.log(goalId)
-
     if (!userId) {
       await session.abortTransaction();
       session.endSession();
@@ -49,26 +47,36 @@ export const fundGoal = async (req, res) => {
       return res.status(404).json({ message: "Goal not found" });
     }
 
+    if (goal.status === "completed") {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Goal is already completed" });
+    }
+
     if (!user.accountBalance || user.accountBalance < parsedAmount) {
       await session.abortTransaction();
       session.endSession();
       return res.status(400).json({ message: "Insufficient account balance" });
     }
 
-
     const newAmount = (goal.currentAmount || 0) + parsedAmount;
 
-    if(newAmount > goal.targetAmount) {
-      return res.status(400).json({message: "You cannot exceed the target amount"})
+    if (newAmount > goal.targetAmount) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ 
+        message: `You cannot exceed the target amount. Maximum allowed: ${goal.targetAmount - goal.currentAmount}` 
+      });
     }
 
-    const progressPercentage = (newAmount / goal.targetAmount) * 100;
+    const progressPercentage = Math.min((newAmount / goal.targetAmount) * 100, 100);
 
     user.accountBalance -= parsedAmount;
     goal.currentAmount = newAmount;
 
     if (goal.currentAmount >= goal.targetAmount) {
       goal.status = "completed";
+      goal.currentAmount = goal.targetAmount;
     }
 
     await user.save({ session });
@@ -91,7 +99,9 @@ export const fundGoal = async (req, res) => {
     session.endSession();
 
     return res.status(201).json({
-      message: "Goal funded successfully",
+      message: goal.status === "completed" 
+        ? "Goal funded and completed successfully!" 
+        : "Goal funded successfully",
       goal: {
         id: goal._id,
         title: goal.title || "Untitled goal",
@@ -99,6 +109,7 @@ export const fundGoal = async (req, res) => {
         targetAmount: goal.targetAmount,
         progress: progressPercentage,
         status: goal.status,
+        amountNeeded: goal.targetAmount - goal.currentAmount,
       },
     });
   } catch (error) {

@@ -64,10 +64,10 @@ export default function ProfilePreview() {
       href: "/dashboard/transactions",
     },
     {
-      id: "savings",
-      label: "Savings",
+      id: "goals",
+      label: "Financial Goals",
       icon: DollarSign,
-      href: "/dashboard/savings",
+      href: "/dashboard/goals",
     },
     {
       id: "insights",

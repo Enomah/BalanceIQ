@@ -25,7 +25,7 @@ const GoalActions: React.FC<GoalActionsProps> = ({
   const [submitError, setSubmitError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const { accessToken } = useAuthStore();
-  const isCompleted = goal.progress >= 100;
+  const isCompleted = goal.status === "completed";
   const canWithdraw = goal.currentAmount > 0;
 
   const handleWithdrawGoal = async (amount?: number) => {

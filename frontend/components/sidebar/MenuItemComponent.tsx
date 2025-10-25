@@ -7,8 +7,6 @@ interface MenuItemComponentProps {
   isCollapsed: boolean;
   currentPath: string;
   showTooltip: boolean;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
 }
 
 export default function MenuItemComponent({
@@ -16,19 +14,15 @@ export default function MenuItemComponent({
   isCollapsed,
   currentPath,
   showTooltip,
-  onMouseEnter,
-  onMouseLeave,
 }: MenuItemComponentProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    onMouseEnter();
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    onMouseLeave();
   };
 
   const baseClasses = `flex items-center p-3 rounded-lg transition-colors w-full ${

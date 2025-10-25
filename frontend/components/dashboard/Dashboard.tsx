@@ -51,22 +51,24 @@ const Dashboard: React.FC = () => {
     fetchDashboard();
   }, []);
 
-  if (!dashboardData) return null;
+  // console.log(dashboardData);
 
-  const { monthlySummary, recentTransactions, activeGoals } = dashboardData;
+  const monthlySummary = dashboardData?.monthlySummary;
+  const recentTransactions = dashboardData?.recentTransactions;
+  const activeGoals = dashboardData?.activeGoals;
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
       <Sidebar currentPath={currentPath} userProfile={userProfile} />
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 sm:overflow-y-auto">
         <div className="mx-auto">
           <div className="sticky z-[100] top-0 left-0">
             <WelcomeSection userProfile={userProfile} />
           </div>
 
           {error ? (
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center mt-[200px]">
               <div className="text-center p-6 bg-[var(--bg-secondary)] rounded-xl shadow-sm">
                 <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
                   Error Loading Dashboard
@@ -84,12 +86,18 @@ const Dashboard: React.FC = () => {
             <SkeletonLoader />
           ) : (
             <div className="px-[10px] sm:px-6 pb-[20px]">
-              <AccountOverview monthlySummary={monthlySummary} />
-              <ChartsSection monthlySummary={monthlySummary} />
+              {monthlySummary && (
+                <>
+                  <AccountOverview monthlySummary={monthlySummary} />
+                  <ChartsSection monthlySummary={monthlySummary} />
+                </>
+              )}
 
               <section className="grid grid-cols-1 lg:grid-cols-2 gap-[10px] sm:gap-6 mb-[10px] sm:mb-6">
-                <GoalsSection activeGoals={activeGoals} />
-                <RecentActivity recentTransactions={recentTransactions} />
+                {activeGoals && <GoalsSection activeGoals={activeGoals} />}
+                {recentTransactions && (
+                  <RecentActivity recentTransactions={recentTransactions} />
+                )}
               </section>
 
               {/* Uncomment if needed

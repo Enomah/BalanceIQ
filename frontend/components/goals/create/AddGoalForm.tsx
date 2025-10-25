@@ -19,6 +19,7 @@ import { FormErrors, FormField } from "@/types/goalTypes";
 import FormSelect from "@/components/dashboard/FormSelect";
 import FormInput from "@/components/dashboard/FormInput";
 import { useDashboardStore } from "@/store/dashboardStore";
+import { useGoalStore } from "@/store/goalsStore";
 
 interface AddGoalFormProps {
   onCancel: () => void;
@@ -40,6 +41,7 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
   const [submitError, setSubmitError] = useState<string>("");
   const [showSuccess, setShowSuccess] = useState(false);
   const { dashboardData, addGoal } = useDashboardStore();
+  const { addGoal: generalAddGoal, setStats, stats } = useGoalStore();
 
   const [formData, setFormData] = useState<FormData>({
     title: "",
@@ -237,7 +239,7 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
       });
 
       const data = await response.json();
-      // console.log(data);
+      console.log(data);
 
       if (!response.ok) {
         throw new Error(
@@ -249,9 +251,20 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
       setShowSuccess(false);
       onSuccess?.();
 
+      generalAddGoal(data.goal);
+
+      const updatedStats = {
+        totalGoals: (stats.totalGoals += 1),
+        totalActive: (stats.totalActive += 1),
+        totalTarget: (stats.totalTarget += data.goal.targetAmount),
+        totalSaved: stats.totalSaved,
+      };
+
+      setStats(updatedStats);
+
       if (dashboardData) {
         // console.log(data.goal)
-        addGoal(data.goal)
+        addGoal(data.goal);
       }
     } catch (error) {
       setSubmitError(

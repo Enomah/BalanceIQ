@@ -16,7 +16,7 @@ const GoalHeader: React.FC<GoalHeaderProps> = ({ goal }) => {
   };
 
   const daysRemaining = getDaysRemaining();
-  const isCompleted = goal.progress >= 100;
+  const isCompleted = goal.status === "completed";
 
   return (
     <div className="flex justify-between items-start mb-3">
@@ -46,7 +46,7 @@ const GoalHeader: React.FC<GoalHeaderProps> = ({ goal }) => {
             isCompleted ? "text-[var(--success-600)]" : "text-[var(--primary-600)]"
           }`}
         >
-          {goal.progress.toFixed(1)}%
+          {isCompleted ? "100" : goal.progress.toFixed(1)}%
         </span>
       </div>
     </div>

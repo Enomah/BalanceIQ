@@ -21,7 +21,7 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userProfile }) => {
   };
 
   return (
-    <section className="welcome-section bg-[var(--bg-secondary)] p-[10px] md:p-[10px]  sm:p-6 shadow-sm mb-[10px] sm:mb-6">
+    <section className="welcome-section bg-[var(--bg-secondary)] p-[10px] md:p-[10px] sm:p-6 shadow-sm mb-[10px] sm:mb-6">
       <div className="flex flex-row justify-between items-center">
         <div className="flex items-center gap-[10px]">
           <button
@@ -32,7 +32,7 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userProfile }) => {
           </button>
           <div>
             <h1 className="text-[20px] sm:text-2xl font-bold text-[var(--text-primary)]">
-              Hey
+              Hey {" "}
               {userProfile?.fullName.split(" ")[0] || "User"} 👋
             </h1>
           </div>

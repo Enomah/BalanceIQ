@@ -58,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
   
 
   return (
-    <div className="fixed inset-0 z-50 flex w-screen h-screen items-center justify-center">
+    <div className="fixed inset-0 z-[200] flex w-screen h-screen items-center justify-center">
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
         onClick={onClose}

@@ -15,7 +15,6 @@ export const getTransactions = async (req, res) => {
     // Calculate how many documents to skip
     const skip = (page - 1) * limit;
 
-  
     // Get total count of transactions for this user (for pagination info)
     const totalCount = await Transaction.countDocuments({ userId: userId });
 
@@ -36,13 +35,13 @@ export const getTransactions = async (req, res) => {
       count: totalCount, // Total number of transactions
       next: page < totalPages ? `${baseUrl}?page=${page + 1}&limit=${limit}` : null,
       prev: page > 1 ? `${baseUrl}?page=${page - 1}&limit=${limit}` : null,
-      current_page: page,
-      total_pages: totalPages,
-      page_size: limit,
+      currentPage: page,
+      totalPages: totalPages,
+      pageSize: limit,
       content: transactions // The actual transaction data for current page
     };
 
-    console.log(`Fetched ${transactions.length} transactions for page ${page}`);
+    // console.log(`Fetched ${transactions.length} transactions for page ${page}`);
     res.status(200).json(response);
   } catch (error) {
     console.error("Error fetching transactions:", error);

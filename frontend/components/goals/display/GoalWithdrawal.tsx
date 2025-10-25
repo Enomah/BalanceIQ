@@ -7,6 +7,7 @@ import { useAuthStore } from "@/store/authStore";
 import { baseUrl } from "@/api/rootUrls";
 import Modal from "@/components/ui/Modal";
 import { useDashboardStore } from "@/store/dashboardStore";
+import { useGoalStore } from "@/store/goalsStore";
 
 interface GoalWithdrawalProps {
   goal: Goal;
@@ -33,7 +34,7 @@ const GoalWithdrawal: React.FC<GoalWithdrawalProps> = ({
   const isCompleted = localGoal.progress >= 100;
   const { updateMonthlySummary, dashboardData, addRecentTransaction } =
     useDashboardStore();
-  // const canWithdraw = localGoal.currentAmount > 0;
+  const { setStats, stats } = useGoalStore();
 
   const handleWithdrawGoal = async (amount?: number) => {
     setSubmitError("");
@@ -81,6 +82,15 @@ const GoalWithdrawal: React.FC<GoalWithdrawalProps> = ({
         onGoalRemove?.(localGoal.id);
         return;
       }
+
+      const updatedStats = {
+        totalGoals: stats.totalGoals,
+        totalActive: stats.totalActive,
+        totalTarget: stats.totalTarget,
+        totalSaved: (stats.totalSaved -= parsedAmount),
+      };
+
+      setStats(updatedStats);
 
       setLocalGoal({
         ...localGoal,

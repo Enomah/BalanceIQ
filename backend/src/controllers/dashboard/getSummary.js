@@ -20,8 +20,6 @@ export const getSummary = async (req, res) => {
       targetMonth === currentDate.getMonth() + 1 &&
       targetYear === currentDate.getFullYear()
     ) {
-      console.log(targetYear, currentDate.getFullYear());
-
       return res.status(200).json({message: "This Month's Summary is not ready, Wait till the month is over!"})
     }
 
@@ -391,7 +389,7 @@ export const getSummary = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error",
-      error: error.message,
+      error: "Server error",
     });
   }
 };

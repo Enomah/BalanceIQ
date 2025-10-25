@@ -22,14 +22,11 @@ const GoalItem: React.FC<GoalItemProps> = ({
   const [showWithdrawWarning, setShowWithdrawWarning] = useState(false);
   const [showFundInput, setShowFundInput] = useState(false);
   const [localGoal, setLocalGoal] = useState<Goal>(goal);
-  
+
   return (
     <div
-      className={`goal-card p-4 border rounded-lg transition-all duration-300 hover:shadow-md relative overflow-hidden ${
-        goal.progress >= 100
-          ? "border-[var(--success-200)] bg-[var(--success-50)]"
-          : "border-[var(--border-light)] bg-[var(--bg-secondary)]"
-      }`}
+      className={`goal-card p-4 border rounded-lg transition-all duration-300 hover:shadow-md relative overflow-hidden border-[var(--border-light)] bg-[var(--bg-secondary)]
+      `}
     >
       <GoalHeader goal={localGoal} />
       <GoalProgress goal={localGoal} />

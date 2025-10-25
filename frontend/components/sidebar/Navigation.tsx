@@ -6,8 +6,6 @@ interface NavigationProps {
   isCollapsed: boolean;
   currentPath: string;
   showTooltip: boolean;
-  onItemHover: () => void;
-  onItemLeave: () => void;
 }
 
 export default function Navigation({
@@ -15,8 +13,6 @@ export default function Navigation({
   isCollapsed,
   currentPath,
   showTooltip,
-  onItemHover,
-  onItemLeave,
 }: NavigationProps) {
   return (
     <nav className="flex-1 p-4">
@@ -28,8 +24,6 @@ export default function Navigation({
             isCollapsed={isCollapsed}
             currentPath={currentPath}
             showTooltip={showTooltip}
-            onMouseEnter={onItemHover}
-            onMouseLeave={onItemLeave}
           />
         ))}
       </ul>

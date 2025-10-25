@@ -29,11 +29,11 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
   const menuItems: MenuItem[] = [
     { id: "dashboard", label: "Dashboard", icon: User, href: "/dashboard" },
     { id: "transactions", label: "Transactions", icon: ShoppingBag, href: "/dashboard/transactions" },
-    { id: "savings", label: "Savings", icon: DollarSign, href: "/savings" },
-    { id: "insights", label: "Insights", icon: Lightbulb, href: "/insights" },
-    { id: "settings", label: "Settings", icon: Settings, href: "/settings" },
-    { id: "privacy", label: "Privacy & Security", icon: Shield, href: "/privacy" },
-    { id: "help", label: "Help & Support", icon: HelpCircle, href: "/help" },
+    { id: "goals", label: "Financial Goals", icon: DollarSign, href: "/dashboard/goals" },
+    { id: "insights", label: "Insights", icon: Lightbulb, href: "/dashboard/insights" },
+    { id: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
+    { id: "privacy", label: "Privacy & Security", icon: Shield, href: "/dashboard/privacy" },
+    { id: "help", label: "Help & Support", icon: HelpCircle, href: "/dashboard/help" },
     { id: "logout", label: "Sign Out", icon: LogOut, isDestructive: true },
   ];
 
@@ -60,22 +60,13 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
     setIsSidebarHovered(false);
   };
 
-  const handleItemHover = () => {
-    // Optional: Add any logic when item is hovered
-  };
 
-  const handleItemLeave = () => {
-    // Optional: Add any logic when item is left
-  };
-
-  // const showTooltip = isCollapsed && isSidebarHovered;
-  const showTooltip = true
+  const showTooltip = isCollapsed && isSidebarHovered;
 
   return (
     <div
       className={`bg-[var(--sidebar-bg)] h-screen hidden sm:flex flex-col border-r border-[var(--border-light)] transition-all duration-300 relative ${
-        // isCollapsed ? "w-20" : "w-64"
-        ""
+        isCollapsed ? "w-20" : "w-64"
       }`}
       onMouseEnter={handleSidebarMouseEnter}
       onMouseLeave={handleSidebarMouseLeave}
@@ -87,8 +78,6 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
         isCollapsed={isCollapsed}
         currentPath={currentPath}
         showTooltip={showTooltip}
-        onItemHover={handleItemHover}
-        onItemLeave={handleItemLeave}
       />
       <div className="p-4 border-t border-[var(--border-light)]">
         <UserProfile

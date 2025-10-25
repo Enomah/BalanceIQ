@@ -27,11 +27,10 @@ export default function TransactionsPage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
   const [pagination, setPagination] = useState({
-    current_page: 1,
-    total_pages: 1,
+    currentPage: 1,
+    totalPages: 1,
     next: null as string | null,
   });
 
@@ -67,8 +66,8 @@ export default function TransactionsPage() {
       }
 
       setPagination({
-        current_page: data.current_page,
-        total_pages: data.total_pages,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
         next: data.next,
       });
     } catch (err) {
@@ -107,7 +106,8 @@ export default function TransactionsPage() {
         userProfile={userProfile}
       />
       <div className="flex-1 sm:overflow-y-auto">
-        <div className="sticky z-[100] top-0 left-0">
+         <div className="mx-auto">
+          <div className="sticky z-[100] top-0 left-0">
           <WelcomeSection userProfile={userProfile} />
         </div>
         {loading && transactions.length === 0 ? (
@@ -129,8 +129,8 @@ export default function TransactionsPage() {
                   <TransactionsList
                     groupedTransactions={groupedTransactions}
                     loading={loadingMore}
-                    currentPage={pagination.current_page}
-                    totalPages={pagination.total_pages}
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
                     onLoadMore={loadMore}
                   />
                 </div>
@@ -138,6 +138,7 @@ export default function TransactionsPage() {
             </motion.div>
           </AnimatePresence>
         )}
+      </div>
       </div>
     </div>
   );
