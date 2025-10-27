@@ -20,8 +20,6 @@ import { useDashboardStore } from "@/store/dashboardStore";
 const Dashboard: React.FC = () => {
   const { userProfile, logout } = useAuthStore();
   const { dashboardData, loading, error, fetchDashboard } = useDashboardStore();
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
-  const [currentPath, setCurrentPath] = useState<string>("/dashboard");
   const [showTour, setShowTour] = useState<boolean>(false);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(false);
 
@@ -59,7 +57,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
-      <Sidebar currentPath={currentPath} userProfile={userProfile} />
+      <Sidebar currentPath={"/dashboard"} userProfile={userProfile} />
 
       <div className="flex-1 sm:overflow-y-auto">
         <div className="mx-auto">

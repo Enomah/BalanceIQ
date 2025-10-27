@@ -106,39 +106,39 @@ export default function TransactionsPage() {
         userProfile={userProfile}
       />
       <div className="flex-1 sm:overflow-y-auto">
-         <div className="mx-auto">
+        <div className="mx-auto">
           <div className="sticky z-[100] top-0 left-0">
-          <WelcomeSection userProfile={userProfile} />
-        </div>
-        {loading && transactions.length === 0 ? (
-          <LoadingState />
-        ) : error && transactions.length === 0 ? (
-          <ErrorState error={error} onRetry={handleRefresh} />
-        ) : groupedTransactions.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <AnimatePresence>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              // className="space-y-8"
-            >
-              <div className="max-w-2xl mx-auto">
-                <div className="px-[10px] sm:px-6 pb-[20px] ">
-                  <TransactionsHeader />
-                  <TransactionsList
-                    groupedTransactions={groupedTransactions}
-                    loading={loadingMore}
-                    currentPage={pagination.currentPage}
-                    totalPages={pagination.totalPages}
-                    onLoadMore={loadMore}
-                  />
+            <WelcomeSection userProfile={userProfile} />
+          </div>
+          {loading && transactions.length === 0 ? (
+            <LoadingState />
+          ) : error && transactions.length === 0 ? (
+            <ErrorState error={error} onRetry={handleRefresh} />
+          ) : groupedTransactions.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                // className="space-y-8"
+              >
+                <div className="max-w-2xl mx-auto">
+                  <div className="px-[10px] sm:px-6 pb-[20px] ">
+                    <TransactionsHeader />
+                    <TransactionsList
+                      groupedTransactions={groupedTransactions}
+                      loading={loadingMore}
+                      currentPage={pagination.currentPage}
+                      totalPages={pagination.totalPages}
+                      onLoadMore={loadMore}
+                    />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        )}
-      </div>
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </div>
       </div>
     </div>
   );

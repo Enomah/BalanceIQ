@@ -50,7 +50,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data: DashboardData = await response.json();
-      console.log(data);
+      // console.log(data);
       set({ dashboardData: data });
     } catch (err) {
       console.error("Fetch error:", err);

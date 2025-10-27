@@ -14,6 +14,7 @@ import {
   Shield,
   HelpCircle,
   LogOut,
+  Goal,
 } from "lucide-react";
 import SidebarHeader from "./SideBarHeader";
 
@@ -29,7 +30,8 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
   const menuItems: MenuItem[] = [
     { id: "dashboard", label: "Dashboard", icon: User, href: "/dashboard" },
     { id: "transactions", label: "Transactions", icon: ShoppingBag, href: "/dashboard/transactions" },
-    { id: "goals", label: "Financial Goals", icon: DollarSign, href: "/dashboard/goals" },
+    { id: "goals", label: "Financial Goals", icon: Goal, href: "/dashboard/goals" },
+    { id: "bugdeting", label: "Budgeting", icon: DollarSign, href: "/dashboard/budgeting" },
     { id: "insights", label: "Insights", icon: Lightbulb, href: "/dashboard/insights" },
     { id: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
     { id: "privacy", label: "Privacy & Security", icon: Shield, href: "/dashboard/privacy" },

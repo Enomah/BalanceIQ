@@ -17,5 +17,11 @@ export const defaultExpenseCategories = [
   "healthcare",
   "education",
   "shopping",
+  "personal",
+  "travel",
+  "gifts",
+  "investment",
+  "debt",
+  "insurance",
   "others",
 ];

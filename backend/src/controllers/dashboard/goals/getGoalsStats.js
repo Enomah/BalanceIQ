@@ -1,9 +1,9 @@
 import Goals from "../../../models/Goals.js";
 
 export const getGoalsStats = async (req, res) => {
-  const userId = req?.user?.id;
-
   try {
+    const userId = req?.user?.id;
+
     const totalCount = await Goals.countDocuments({ userId: userId });
 
     const activeGoalsLength = (
@@ -29,7 +29,7 @@ export const getGoalsStats = async (req, res) => {
       totalSaved: totalSaved[0]?.currentAmount,
     };
 
-        res.status(200).json(stats);
+    res.status(200).json(stats);
   } catch (error) {
     console.error("Error fetching transactions:", error);
     return res.status(500).json({ message: "Server error" });
