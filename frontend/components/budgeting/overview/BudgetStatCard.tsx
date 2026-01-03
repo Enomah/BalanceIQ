@@ -11,8 +11,13 @@ interface Props {
   style?: string;
 }
 
-export default function BudgetStatCard({ 
-  title, value, subtitle, icon, colorClass, bgClass, delay = 0 
+export default function BudgetStatCard({
+  title,
+  value,
+  subtitle,
+  icon,
+  bgClass,
+  delay = 0,
 }: Props) {
   return (
     <motion.div
@@ -24,12 +29,16 @@ export default function BudgetStatCard({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[var(--text-secondary)] text-sm">{title}</p>
-          <p className="text-2xl font-bold text-[var(--text-primary)] mt-1">{value}</p>
-          {subtitle && <p className="text-sm text-[var(--text-secondary)] mt-1">{subtitle}</p>}
+          <p className="text-2xl font-bold text-[var(--text-primary)] mt-1">
+            {value}
+          </p>
+          {subtitle && (
+            <p className="text-sm text-[var(--text-secondary)] mt-1">
+              {subtitle}
+            </p>
+          )}
         </div>
-        <div className={`p-3 ${bgClass} rounded-lg`}>
-          {icon}
-        </div>
+        <div className={`p-3 ${bgClass} rounded-lg`}>{icon}</div>
       </div>
     </motion.div>
   );

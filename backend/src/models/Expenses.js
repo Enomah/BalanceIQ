@@ -22,9 +22,9 @@ const expenseSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    date: {
-      type: Date,
-      default: "",
+    transactionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transaction",
     },
   },
   { timestamps: true }

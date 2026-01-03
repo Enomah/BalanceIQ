@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 interface GoalsTabsProps {
   activeTab: "active" | "completed";
   onTabChange: (tab: "active" | "completed") => void;
@@ -15,9 +13,7 @@ export default function GoalsTabs({ activeTab, onTabChange }: GoalsTabsProps) {
           <button
             onClick={() => onTabChange("active")}
             className={`relative px-6 py-3 rounded-md text-sm font-medium  hover:opacity-50  transition-colors ${
-              activeTab === "active"
-                ? "bg-[var(--bg-primary)]"
-                : ""
+              activeTab === "active" ? "bg-[var(--bg-primary)]" : ""
             }`}
           >
             Active Goals
@@ -25,9 +21,7 @@ export default function GoalsTabs({ activeTab, onTabChange }: GoalsTabsProps) {
           <button
             onClick={() => onTabChange("completed")}
             className={`relative px-6 py-3 rounded-md text-sm hover:opacity-50 font-medium transition-colors ${
-              activeTab === "completed"
-                ? "bg-[var(--bg-primary)]"
-                : ""
+              activeTab === "completed" ? "bg-[var(--bg-primary)]" : ""
             }`}
           >
             Completed Goals

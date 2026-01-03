@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ArrowRight,
-  Play,
   Shield,
   TrendingUp,
   DollarSign,
@@ -182,7 +181,9 @@ export const DashboardPreview = () => {
                   </div>
                   <div className={`p-[2px] ${stat.iconBg} rounded-md`}>
                     <IconComponent
-                      className={`h-[15px] w-[15px] ${stat.iconColor} ${stat.iconRotation || ""}`}
+                      className={`h-[15px] w-[15px] ${stat.iconColor} ${
+                        stat.iconRotation || ""
+                      }`}
                     />
                   </div>
                 </div>
@@ -198,13 +199,15 @@ export const DashboardPreview = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {progressData.map((progress, index) => (
+          {progressData.map((progress) => (
             <div key={progress.id}>
               <div className="flex justify-between items-center mb-4">
                 <div className="text-[var(--text-primary)] font-medium flex items-center">
                   {progress.icon && (
                     <progress.icon
-                      className={`h-[15px] w-[15px] mr-2 ${progress.iconColor || "text-[var(--primary-500)]"}`}
+                      className={`h-[15px] w-[15px] mr-2 ${
+                        progress.iconColor || "text-[var(--primary-500)]"
+                      }`}
                     />
                   )}
                   {progress.title}
@@ -213,7 +216,7 @@ export const DashboardPreview = () => {
                   {progress.value}
                 </span>
               </div>
-              
+
               {progress.id === "savings-goal" ? (
                 <>
                   <div className="w-full bg-[var(--border-light)] rounded-full h-3 mb-2">
@@ -239,14 +242,14 @@ export const DashboardPreview = () => {
                   </div>
                   <div className="mt-3 flex space-x-2">
                     <div className="flex-1 bg-[var(--success-300)] h-2 rounded-full overflow-hidden">
-                      <div 
-                        className="bg-[var(--success-500)] h-2 rounded-full" 
+                      <div
+                        className="bg-[var(--success-500)] h-2 rounded-full"
                         style={{ width: progress.progressWidth }}
                       ></div>
                     </div>
                     <div className="flex-1 bg-[var(--primary-300)] h-2 rounded-full overflow-hidden">
-                      <div 
-                        className="bg-[var(--primary-500)] h-2 rounded-full" 
+                      <div
+                        className="bg-[var(--primary-500)] h-2 rounded-full"
                         style={{ width: "33%" }}
                       ></div>
                     </div>

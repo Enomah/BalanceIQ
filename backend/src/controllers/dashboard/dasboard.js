@@ -4,6 +4,7 @@ import Goal from "../../models/Goals.js";
 import Income from "../../models/Incomes.js";
 import Expense from "../../models/Expenses.js";
 import Transaction from "../../models/Transactions.js";
+import { generateInsights } from "../../utils/insightsEngine.js";
 import {
   defaultExpenseCategories,
   defaultIncomeSources,
@@ -54,7 +55,7 @@ export const getDashboardData = async (req, res) => {
       },
       { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
-    const income =  incomeAgg[0]?.total || 0;
+    const income = incomeAgg[0]?.total || 0;
 
     // 4) Aggregate monthly expenses
     const expenseAgg = await Expense.aggregate([
@@ -182,7 +183,22 @@ export const getDashboardData = async (req, res) => {
       (g) => (g.status || "").toLowerCase() === "completed"
     ).length;
 
-    // 12) Package response
+    // 12) Generate Insights
+    const insights = generateInsights(
+      {
+        monthlySummary: {
+          income,
+          expenses,
+          balance,
+          incomeCategoryTotals,
+          expenseCategoryTotals,
+        },
+        activeGoals,
+      },
+      user
+    );
+
+    // 13) Package response
     return res.status(200).json({
       monthlySummary: {
         income,
@@ -197,6 +213,7 @@ export const getDashboardData = async (req, res) => {
       monthlyExpenses,
       recentTransactions,
       activeGoals,
+      insights, // Added insights array
       stats: {
         transactionsCountThisMonth,
         totalGoals,

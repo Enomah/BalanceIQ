@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, CheckCircle, Loader2, SkipForward } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import React from "react";
 
 interface ChildProps {
@@ -56,7 +56,11 @@ export default function NavigationFooter({
             className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-[var(--success-500)] to-[var(--success-600)] hover:from-[var(--success-600)] hover:to-[var(--success-700)] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <span>Get Started</span>
-           {isSubmitting ? <Loader2 className="animate-spin w-4 h-4"/> : <CheckCircle className="h-4 w-4" />}
+            {isSubmitting ? (
+              <Loader2 className="animate-spin w-4 h-4" />
+            ) : (
+              <CheckCircle className="h-4 w-4" />
+            )}
           </motion.button>
         )}
       </div>

@@ -107,7 +107,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
           }, 2000);
         }
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);
@@ -137,7 +137,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
         setOtp(["", "", "", "", "", ""]);
         inputRefs.current[0]?.focus();
       }
-    } catch (error) {
+    } catch {
       setErrors({ resend: "Failed to resend OTP. Please try again." });
     } finally {
       setIsResending(false);
@@ -188,7 +188,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
             Verify Your Email
           </h2>
           <p className="text-white/80 mb-2">
-            We've sent a 6-digit code to{" "}
+            We&apos;ve sent a 6-digit code to{" "}
             <span className="font-semibold">{email}</span>
           </p>
           <p className="text-white/60">Enter the code below to continue</p>
@@ -287,7 +287,8 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
         </form>
         <div className="mt-6 text-center text-sm text-white/60">
           <p>
-            Didn't receive the email? Check your spam folder or try resending.
+            Didn&apos;t receive the email? Check your spam folder or try
+            resending.
           </p>
         </div>
       </div>

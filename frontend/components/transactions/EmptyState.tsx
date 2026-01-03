@@ -1,36 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { useAuthStore } from "@/store/authStore";
+import { SearchX, Inbox } from "lucide-react";
 
-export default function EmptyState() {
-  const { userProfile } = useAuthStore();
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+interface EmptyStateProps {
+  isFiltered?: boolean;
+  onClearFilters?: () => void;
+}
 
+export default function EmptyState({
+  isFiltered,
+  onClearFilters,
+}: EmptyStateProps) {
   return (
-    <div className="flex h-screen bg-[var(--bg-primary)]">
-      <div className="flex-1 min-h-screen bg-[var(--bg-primary)] py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center py-12">
-            <div className="w-24 h-24 mx-auto mb-6 text-[var(--text-tertiary)]">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
-              No transactions found
-            </h3>
-            <p className="text-[var(--text-secondary)] mb-6">
-              Your transaction history will appear here once you start using your account.
-            </p>
-          </div>
-        </div>
+    <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+      <div className="w-20 h-20 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mb-6 text-[var(--text-tertiary)]">
+        {isFiltered ? <SearchX size={40} /> : <Inbox size={40} />}
       </div>
+      <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
+        {isFiltered ? "No matching transactions" : "No transactions found"}
+      </h3>
+      <p className="text-[var(--text-secondary)] max-w-sm mb-8">
+        {isFiltered
+          ? "We couldn't find any transactions matching your current filters. Try adjusting your search or filters."
+          : "Your transaction history will appear here once you start recording your income and expenses."}
+      </p>
+      {isFiltered && onClearFilters && (
+        <button
+          onClick={onClearFilters}
+          className="px-6 py-2 bg-[var(--primary-500)] text-white rounded-lg hover:bg-[var(--primary-600)] transition-colors font-medium"
+        >
+          Clear all filters
+        </button>
+      )}
     </div>
   );
 }

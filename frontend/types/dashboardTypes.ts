@@ -20,6 +20,7 @@ export interface Goal {
 
 export interface Transaction {
   id: string;
+  _id?: string;
   description: string;
   amount: number;
   type: "income" | "expense" | "savings";
@@ -33,11 +34,19 @@ export interface DashboardStats {
   completedGoals: number;
 }
 
+export interface Insight {
+  type: "success" | "info" | "warning" | "danger";
+  title: string;
+  message: string;
+  icon: string;
+}
+
 export interface DashboardData {
   monthlySummary: MonthlySummary;
   recentTransactions: Transaction[];
   activeGoals: Goal[];
   stats: DashboardStats;
+  insights: Insight[];
 }
 
 export interface MenuItem {
@@ -73,4 +82,43 @@ export interface FetchTransactionsParams {
   endDate?: string;
   type?: "income" | "expense" | "savings";
   category?: string;
+}
+
+export type ActiveTab = "active" | "completed";
+
+export interface ShoppingListItem {
+  _id?: string;
+  name: string;
+  quantity: number;
+  unit?: string;
+  price: number;
+  category:
+    | "groceries"
+    | "electronics"
+    | "clothing"
+    | "household"
+    | "health"
+    | "other";
+  checked: boolean;
+}
+
+export interface ShoppingList {
+  _id: string;
+  userId: string;
+  name: string;
+  items: ShoppingListItem[];
+  totalPrice: number;
+  status: "active" | "completed" | "archived";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ShoppingListsResponse {
+  lists: ShoppingList[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalLists: number;
+    hasMore: boolean;
+  };
 }

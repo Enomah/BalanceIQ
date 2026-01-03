@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar } from "lucide-react";
 import React from "react";
 
 interface FinancialGoalsStepProps {
@@ -11,10 +10,13 @@ interface FinancialGoalsStepProps {
     targetAmount: string;
     targetDate: string;
   };
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
 }
 
-const FinancialGoalsStep: React.FC<FinancialGoalsStepProps> = ({ formData, onChange }) => {
+const FinancialGoalsStep: React.FC<FinancialGoalsStepProps> = ({
+  formData,
+  onChange,
+}) => {
   const goals = [
     { value: "emergency fund", label: "Emergency Fund", emoji: "🛡️" },
     { value: "pay debt", label: "Pay Off Debt", emoji: "💳" },
@@ -34,7 +36,7 @@ const FinancialGoalsStep: React.FC<FinancialGoalsStepProps> = ({ formData, onCha
         transition={{ delay: 0.4 }}
       >
         <label className="block text-sm font-medium text-[var(--primary-50)] mb-3">
-          What's your primary financial goal?
+          What&apos;s your primary financial goal?
         </label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {goals.map((goal) => (
@@ -52,7 +54,9 @@ const FinancialGoalsStep: React.FC<FinancialGoalsStepProps> = ({ formData, onCha
             >
               <div className="flex items-center space-x-2">
                 <span className="text-xl">{goal.emoji}</span>
-                <span className="text-sm font-medium text-left">{goal.label}</span>
+                <span className="text-sm font-medium text-left">
+                  {goal.label}
+                </span>
               </div>
             </motion.button>
           ))}

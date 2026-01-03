@@ -1,10 +1,10 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { TrendingUp, TrendingDown, Zap, PiggyBank } from "lucide-react";
 import { SummaryData } from "@/types/summaryTypes";
 import { formatCurrency } from "@/lib/format";
 import { useAuthStore } from "@/store/authStore";
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -54,7 +54,6 @@ export default function FinancialHealth({ summaryData }: FinancialHealthProps) {
 
   return (
     <motion.div
-      //@ts-ignore
       variants={itemVariants}
       className="bg-[var(--bg-secondary)] rounded-xl  p-[10px]  sm:p-6 shadow-sm"
     >

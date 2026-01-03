@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import {
   ResponsiveContainer,
   BarChart,
@@ -32,7 +32,7 @@ const CHART_COLORS = {
   ],
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -68,7 +68,6 @@ export default function IncomeExpenseChart({
 
   return (
     <motion.div
-      //@ts-ignore
       variants={itemVariants}
       className="bg-[var(--bg-secondary)] rounded-xl p-[10px]  sm:p-6 shadow-sm"
     >
@@ -102,26 +101,31 @@ export default function IncomeExpenseChart({
                     <p className="font-semibold text-[var(--text-primary)] mb-2">
                       {label}
                     </p>
-                    {payload.map((entry: any, index: number) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between gap-4 py-1"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: entry.color }}
-                          />
-                          <span className="text-sm text-[var(--text-secondary)] capitalize">
-                            {entry.name}:
+                    {payload.map(
+                      (
+                        entry: { color: string; name: string; value: number },
+                        index: number
+                      ) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between gap-4 py-1"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: entry.color }}
+                            />
+                            <span className="text-sm text-[var(--text-secondary)] capitalize">
+                              {entry.name}:
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold text-[var(--text-primary)]">
+                            {userProfile &&
+                              formatCurrency(entry.value, userProfile.currency)}
                           </span>
                         </div>
-                        <span className="text-sm font-semibold text-[var(--text-primary)]">
-                          {userProfile &&
-                            formatCurrency(entry.value, userProfile.currency)}
-                        </span>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 );
               }

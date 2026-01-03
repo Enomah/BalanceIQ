@@ -13,13 +13,14 @@ import {
   Focus,
 } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
-import { baseUrl } from "@/api/rootUrls";
 import { goalCategories } from "@/constants/goal";
 import { FormErrors, FormField } from "@/types/goalTypes";
 import FormSelect from "@/components/dashboard/FormSelect";
 import FormInput from "@/components/dashboard/FormInput";
-import { useDashboardStore } from "@/store/dashboardStore";
-import { useGoalStore } from "@/store/goalsStore";
+// import { useToastStore } from "@/store/toastStore";
+import { useAppMutation } from "@/hooks/useAppMutation";
+import apiClient from "@/lib/api/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AddGoalFormProps {
   onCancel: () => void;
@@ -36,12 +37,19 @@ interface FormData {
 }
 
 const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
-  const { userProfile, accessToken } = useAuthStore();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string>("");
-  const [showSuccess, setShowSuccess] = useState(false);
-  const { dashboardData, addGoal } = useDashboardStore();
-  const { addGoal: generalAddGoal, setStats, stats } = useGoalStore();
+  const { userProfile } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  const mutation = useAppMutation({
+    mutationFn: (data: Partial<FormData>) =>
+      apiClient.post("/dashboard/goals", data),
+    successMessage: "Goal created successfully! 🎉",
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      onSuccess?.();
+    },
+  });
 
   const [formData, setFormData] = useState<FormData>({
     title: "",
@@ -190,9 +198,6 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
-    if (submitError) {
-      setSubmitError("");
-    }
   };
 
   const calculateMonthlySavings = () => {
@@ -207,80 +212,29 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
     return targetAmount / monthsDiff;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitError("");
 
     if (!validateForm()) {
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      const goalData = {
-        title: formData.title.trim(),
-        targetAmount: parseFloat(formData.targetAmount),
-        targetDate: formData.targetDate
-          ? new Date(formData.targetDate).toISOString()
-          : undefined,
-        description: formData.description.trim(),
-        category: formData.category,
-        priority: formData.priority,
-      };
-
-      const response = await fetch(`${baseUrl}/dashboard/goals`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(goalData),
-      });
-
-      const data = await response.json();
-      console.log(data);
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || `HTTP error! status: ${response.status}`
-        );
-      }
-
-      setShowSuccess(true);
-      setShowSuccess(false);
-      onSuccess?.();
-
-      generalAddGoal(data.goal);
-
-      const updatedStats = {
-        totalGoals: (stats.totalGoals += 1),
-        totalActive: (stats.totalActive += 1),
-        totalTarget: (stats.totalTarget += data.goal.targetAmount),
-        totalSaved: stats.totalSaved,
-      };
-
-      setStats(updatedStats);
-
-      if (dashboardData) {
-        // console.log(data.goal)
-        addGoal(data.goal);
-      }
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Failed to create goal. Please try again."
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+    mutation.mutate({
+      title: formData.title.trim(),
+      targetAmount: formData.targetAmount,
+      targetDate: formData.targetDate
+        ? new Date(formData.targetDate).toISOString()
+        : undefined,
+      description: formData.description.trim(),
+      category: formData.category,
+      priority: formData.priority,
+    });
   };
 
   const monthlySavings = calculateMonthlySavings();
-  const isFormDisabled = isSubmitting;
+  const isFormDisabled = mutation.isPending;
 
-  if (showSuccess) {
+  if (mutation.isSuccess) {
     return (
       <div className="text-center py-8">
         <div className="animate-bounce mb-4">
@@ -307,9 +261,10 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
       onSubmit={handleSubmit}
       className="space-y-[10px] sm:space-y-6 max-h-[70vh] overflow-y-auto pr-2"
     >
-      {submitError && (
+      {mutation.error && (
         <div className="p-3 bg-[var(--error-50)] border border-[var(--error-200)] rounded-lg text-[var(--error-700)] text-sm">
-          {submitError}
+          {(mutation.error as { message?: string })?.message ||
+            "An error occurred"}
         </div>
       )}
 
@@ -395,7 +350,7 @@ const AddGoalForm: React.FC<AddGoalFormProps> = ({ onCancel, onSuccess }) => {
           className="flex-1 py-3 px-6 bg-[var(--primary-500)] text-white rounded-lg font-medium hover:bg-[var(--primary-600)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:ring-offset-2 flex items-center justify-center disabled:opacity-50"
           disabled={isFormDisabled}
         >
-          {isSubmitting ? (
+          {mutation.isPending ? (
             <>
               <Loader2 size={20} className="animate-spin mr-2" />
               Creating...

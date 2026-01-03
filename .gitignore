@@ -39,3 +39,7 @@ coverage/
 # Misc
 *.tar.gz
 *.zip
+
+# Project Management
+ROADMAP.md
+MVP_COMPLETION_PLAN.md

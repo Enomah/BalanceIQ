@@ -1,6 +1,5 @@
-
-import { create } from 'zustand';
-import { Transaction, MonthYearGroup } from '@/types/dashboardTypes';
+import { create } from "zustand";
+import { Transaction, MonthYearGroup } from "@/types/dashboardTypes";
 
 interface TransactionsResponse {
   count: number;
@@ -20,13 +19,27 @@ interface TransactionState {
   groupTransactionsByMonth: (transactions: Transaction[]) => MonthYearGroup[];
   setTransactions: (response: TransactionsResponse) => void;
   addTransaction: (transaction: Transaction) => void;
-  updateTransactions: (response: TransactionsResponse) => void; 
+  removeTransaction: (transactionId: string) => void;
+  patchTransaction: (transaction: Transaction) => void;
+  updateTransactions: (response: TransactionsResponse) => void;
 }
 
 const monthNames = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
+
+import { groupTransactionsByMonth } from "@/lib/transactions";
 
 export const useTransactionStore = create<TransactionState>((set, get) => ({
   transactions: [],
@@ -34,59 +47,60 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
   loading: false,
   error: null,
 
-  groupTransactionsByMonth: (transactions: Transaction[]): MonthYearGroup[] => {
-    const groups: MonthYearGroup[] = [];
-    const groupMap = new Map<string, MonthYearGroup>();
+  groupTransactionsByMonth,
 
-    transactions.forEach(transaction => {
-      const date = new Date(transaction.createdAt);
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const key = `${year}-${month}`;
+  setTransactions: (response) =>
+    set({
+      transactions: response.content,
+      groupedTransactions: get().groupTransactionsByMonth(response.content),
+      error: null,
+    }),
 
-      if (!groupMap.has(key)) {
-        groupMap.set(key, {
-          year,
-          month,
-          monthName: monthNames[month],
-          transactions: []
-        });
-      }
-      groupMap.get(key)!.transactions.push(transaction);
-    });
+  addTransaction: (transaction) =>
+    set((state) => {
+      const newTransactions = [transaction, ...state.transactions];
+      return {
+        transactions: newTransactions,
+        groupedTransactions: get().groupTransactionsByMonth(newTransactions),
+      };
+    }),
 
-    return Array.from(groupMap.values())
-      .sort((a, b) => {
-        if (a.year !== b.year) return b.year - a.year;
-        return b.month - a.month;
-      })
-      .map(group => ({
-        ...group,
-        transactions: group.transactions.sort((a, b) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        )
-      }));
-  },
+  removeTransaction: (transactionId) =>
+    set((state) => {
+      const newTransactions = state.transactions.filter(
+        (t) => t.id !== transactionId && t._id !== transactionId
+      );
+      return {
+        transactions: newTransactions,
+        groupedTransactions: get().groupTransactionsByMonth(newTransactions),
+      };
+    }),
 
-  setTransactions: (response) => set({
-    transactions: response.content,
-    groupedTransactions: get().groupTransactionsByMonth(response.content),
-    error: null
-  }),
+  patchTransaction: (updatedTransaction) =>
+    set((state) => {
+      const newTransactions = state.transactions.map((t) => {
+        const isMatch =
+          (t.id &&
+            (t.id === updatedTransaction.id ||
+              t.id === updatedTransaction._id)) ||
+          (t._id &&
+            (t._id === updatedTransaction.id ||
+              t._id === updatedTransaction._id));
 
-  addTransaction: (transaction) => set((state) => {
-    const newTransactions = [transaction, ...state.transactions];
-    return {
-      transactions: newTransactions,
-      groupedTransactions: get().groupTransactionsByMonth(newTransactions)
-    };
-  }),
+        return isMatch ? { ...t, ...updatedTransaction } : t;
+      });
+      return {
+        transactions: newTransactions,
+        groupedTransactions: get().groupTransactionsByMonth(newTransactions),
+      };
+    }),
 
-  updateTransactions: (response) => set((state) => {
-    const newTransactions = [...state.transactions, ...response.content];
-    return {
-      transactions: newTransactions,
-      groupedTransactions: get().groupTransactionsByMonth(newTransactions)
-    };
-  })
+  updateTransactions: (response) =>
+    set((state) => {
+      const newTransactions = [...state.transactions, ...response.content];
+      return {
+        transactions: newTransactions,
+        groupedTransactions: get().groupTransactionsByMonth(newTransactions),
+      };
+    }),
 }));

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { motion } from "framer-motion";
 import {
@@ -13,52 +13,27 @@ import {
 import { SummaryData } from "@/types/summaryTypes";
 import { useAuthStore } from "@/store/authStore";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { y: 30, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-};
-
-const floatingAnimation = {
-  animate: {
-    y: [0, -10, 0],
-    transition: {
-      duration: 4,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  },
-};
-
 interface OverviewCardsProps {
   summaryData: SummaryData;
 }
 
 export default function OverviewCards({ summaryData }: OverviewCardsProps) {
-  const { userProfile } = useAuthStore()
+  const { userProfile } = useAuthStore();
 
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: userProfile?.currency,
-      minimumFractionDigits: 0,
-    }).format(amount);
+    try {
+      return new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: userProfile?.currency || "NGN",
+        minimumFractionDigits: 0,
+      }).format(amount);
+    } catch {
+      return new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+        minimumFractionDigits: 0,
+      }).format(amount);
+    }
   };
 
   return (

@@ -39,7 +39,12 @@ export const verifyOtp = async (req, res) => {
     await Otp.deleteOne({ _id: otpRecord._id });
 
     const token = jwt.sign(
-      { id: user._id, email: user.email, nickname: user.nickname },
+      {
+        id: user._id,
+        email: user.email,
+        nickname: user.nickname,
+        role: user.role,
+      },
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
@@ -54,6 +59,7 @@ export const verifyOtp = async (req, res) => {
         nickname: user.nickname,
         email: user.email,
         isVerified: user.isVerified,
+        role: user.role,
       },
       accessToken: token,
     });

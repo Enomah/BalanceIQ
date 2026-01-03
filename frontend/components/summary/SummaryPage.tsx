@@ -15,16 +15,15 @@ import ErrorState from "./ErrorState";
 import LoadingState from "./LoadingState";
 import { SummaryData, MonthYearOption } from "@/types/summaryTypes";
 import OverviewCards from "./OverviewCards";
-import { requireAuth } from "@/lib/requireAuth";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 import { Calendar } from "lucide-react";
 
 export default function SummaryPage() {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
   const { accessToken, userProfile } = useAuthStore();
   const searchParams = useSearchParams();
   const monthParam = searchParams.get("month");
   const yearParam = searchParams.get("year");
-  requireAuth();
+  useRequireAuth();
 
   const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,7 +54,7 @@ export default function SummaryPage() {
     const normalizedStart = normalizeDate(startDate);
     const normalizedEnd = normalizeDate(endDate);
 
-    let currentDate = new Date(normalizedStart);
+    const currentDate = new Date(normalizedStart);
 
     while (currentDate <= normalizedEnd) {
       const year = currentDate.getFullYear();
@@ -177,14 +176,11 @@ export default function SummaryPage() {
       //   }
       // }
     }
-  }, []);
+  }, [monthParam, yearParam]);
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
-      <Sidebar
-        currentPath={"/dashboard/summary"}
-        userProfile={userProfile}
-      />
+      <Sidebar currentPath={"/dashboard/summary"} userProfile={userProfile} />
 
       <div className="flex-1 sm:overflow-y-auto">
         <div className="mx-auto">

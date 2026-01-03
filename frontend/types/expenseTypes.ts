@@ -1,16 +1,23 @@
 import { OptionType } from "@/components/dashboard/FormSelect";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, Loader2, RefreshCcw, Calendar } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface FormDataTypes {
   amount: string;
   category: string;
   description: string;
+  isRecurring?: boolean;
+  frequency?: "daily" | "weekly" | "monthly" | "yearly";
+  startDate?: string;
 }
 
 export interface FormErrors {
   amount?: string;
   category?: string;
   description?: string;
+  frequency?: string;
+  startDate?: string;
+  isRecurring?: string;
 }
 
 export interface FormField {

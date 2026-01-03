@@ -7,8 +7,16 @@ import CategoryProgress from "./CategoryProgress";
 import CategoryAmounts from "./CategoryAmounts";
 import EditInput from "./EditInput";
 import StatusBadge from "./StatusBadge";
+import Modal from "../../ui/Modal";
+import AddExpenseForm from "../../dashboard/AddExpenseForm";
+import { Plus } from "lucide-react";
 
-import { getProgress, isOverspent, getRemaining, getStatus } from "./calculations";
+import {
+  getProgress,
+  isOverspent,
+  getRemaining,
+  getStatus,
+} from "./calculations";
 
 interface Category {
   key: string;
@@ -23,16 +31,25 @@ interface Props {
   category: Category;
   totalBudget: number;
   currency: string;
+  onRefresh: () => void;
 }
 
-export default function BudgetCategoryCard({ category, totalBudget, currency }: Props) {
+export default function BudgetCategoryCard({
+  category,
+  totalBudget,
+  currency,
+  onRefresh,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [editValue, setEditValue] = useState("");
 
   const progress = getProgress(category.spent, category.allocated);
   const overspent = isOverspent(category.spent, category.allocated);
   const remaining = getRemaining(category.allocated, category.spent);
-  const status = getStatus(progress, overspent).label.toLowerCase().replace(" ", "") as "ontrack" | "almostthere" | "overspent";
+  const status = getStatus(progress, overspent)
+    .label.toLowerCase()
+    .replace(" ", "") as "ontrack" | "almostthere" | "overspent" | "overbudget";
 
   const handleEditStart = () => {
     setIsEditing(true);
@@ -40,7 +57,7 @@ export default function BudgetCategoryCard({ category, totalBudget, currency }: 
   };
 
   const handleSave = () => {
-    const spent = parseFloat(editValue) || 0;
+    // const spent = parseFloat(editValue) || 0;
     setIsEditing(false);
     setEditValue("");
   };
@@ -50,8 +67,9 @@ export default function BudgetCategoryCard({ category, totalBudget, currency }: 
     setEditValue("");
   };
 
-  const percentageOfTotal = ((category.allocated / totalBudget) * 100).toFixed(1);
-
+  const percentageOfTotal = ((category.allocated / totalBudget) * 100).toFixed(
+    1
+  );
 
   return (
     <motion.div
@@ -59,8 +77,8 @@ export default function BudgetCategoryCard({ category, totalBudget, currency }: 
       animate={{ opacity: 1, scale: 1 }}
       className={`bg-[var(--bg-secondary)] rounded-xl border transition-all duration-300 hover:shadow-md ${
         overspent
-          ? 'border-[var(--error-300)] hover:border-[var(--error-400)]'
-          : 'border-[var(--border-light)] hover:border-[var(--border-medium)]'
+          ? "border-[var(--error-300)] hover:border-[var(--error-400)]"
+          : "border-[var(--border-light)] hover:border-[var(--border-medium)]"
       }`}
     >
       <div className="p-4 border-b border-[var(--border-light)]">
@@ -74,7 +92,11 @@ export default function BudgetCategoryCard({ category, totalBudget, currency }: 
       </div>
 
       <div className="p-4 space-y-3">
-        <CategoryProgress progress={progress} isOverspent={overspent} color={category.color} />
+        <CategoryProgress
+          progress={progress}
+          isOverspent={overspent}
+          color={category.color}
+        />
         <CategoryAmounts
           allocated={category.allocated}
           spent={category.spent}
@@ -82,6 +104,17 @@ export default function BudgetCategoryCard({ category, totalBudget, currency }: 
           isOverspent={overspent}
           currency={currency}
         />
+
+        <div className="flex gap-2 pt-2">
+          <button
+            onClick={() => setIsAddExpenseOpen(true)}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] rounded-lg text-xs font-medium border border-[var(--border-light)] transition-all active:scale-95"
+          >
+            <Plus size={14} className="text-[var(--brand-primary)]" />
+            Add Expense
+          </button>
+        </div>
+
         {isEditing && (
           <EditInput
             value={editValue}
@@ -93,6 +126,22 @@ export default function BudgetCategoryCard({ category, totalBudget, currency }: 
       </div>
 
       <StatusBadge status={status} />
+
+      <Modal
+        isOpen={isAddExpenseOpen}
+        onClose={() => setIsAddExpenseOpen(false)}
+        title={`Add Expense: ${category.label}`}
+        size="lg"
+      >
+        <AddExpenseForm
+          initialCategory={category.key}
+          onCancel={() => setIsAddExpenseOpen(false)}
+          onSuccess={() => {
+            setIsAddExpenseOpen(false);
+            onRefresh();
+          }}
+        />
+      </Modal>
     </motion.div>
   );
 }

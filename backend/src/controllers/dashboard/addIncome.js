@@ -3,13 +3,15 @@ import { defaultIncomeSources } from "../../constants/transaction.js";
 import User from "../../models/Users.js";
 import Income from "../../models/Incomes.js";
 import Transactions from "../../models/Transactions.js";
+import RecurringTransaction from "../../models/RecurringTransaction.js";
 
 export const addIncome = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const { amount, category, description, date } = req.body;
+    const { amount, category, description, isRecurring, frequency, startDate } =
+      req.body;
     const userId = req?.user?.id;
 
     let errors = {};
@@ -41,19 +43,7 @@ export const addIncome = async (req, res) => {
     user.accountBalance += parsedAmount;
     await user.save({ session });
 
-    const income = await Income.create(
-      [
-        {
-          userId,
-          amount: parsedAmount,
-          category,
-          description: description ? description.trim().slice(0, 500) : "",
-        },
-      ],
-      { session }
-    );
-
-    await Transactions.create(
+    const transaction = await Transactions.create(
       [
         {
           userId,
@@ -66,17 +56,60 @@ export const addIncome = async (req, res) => {
       { session }
     );
 
+    await Income.create(
+      [
+        {
+          userId,
+          amount: parsedAmount,
+          category,
+          description: description ? description.trim().slice(0, 500) : "",
+          transactionId: transaction[0]._id,
+        },
+      ],
+      { session }
+    );
+
+    // Handle Recurring Logic
+    if (isRecurring) {
+      const start = startDate ? new Date(startDate) : new Date();
+      const next = new Date(start);
+
+      // Calculate next occurrence
+      if (frequency === "daily") next.setDate(next.getDate() + 1);
+      else if (frequency === "weekly") next.setDate(next.getDate() + 7);
+      else if (frequency === "monthly") next.setMonth(next.getMonth() + 1);
+      else if (frequency === "yearly") next.setFullYear(next.getFullYear() + 1);
+
+      await RecurringTransaction.create(
+        [
+          {
+            userId,
+            type: "income",
+            amount: parsedAmount,
+            category,
+            description,
+            frequency,
+            startDate: start,
+            nextDate: next,
+            lastProcessed: start,
+          },
+        ],
+        { session }
+      );
+    }
+
     await session.commitTransaction();
     session.endSession();
 
     return res.status(201).json({
       message: "Income added successfully",
       income: {
-        id: income[0]._id,
-        userId: income[0].userId,
-        amount: income[0].amount,
-        category: income[0].category,
-        description: income[0].description,
+        id: transaction[0]._id,
+        userId: transaction[0].userId,
+        amount: transaction[0].amount,
+        category: transaction[0].category,
+        description: transaction[0].description,
+        createdAt: transaction[0].createdAt,
       },
     });
   } catch (error) {

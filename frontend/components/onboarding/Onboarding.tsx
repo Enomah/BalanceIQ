@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
-import { requireAuth } from "@/lib/requireAuth";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 import BasicProfileStep from "./BasicProfileStep";
 import FinancialBasicsStep from "./FinancialBasicsStep";
 import FinancialGoalsStep from "./FinancialGoalsStep";
@@ -30,7 +30,7 @@ export default function Onboarding() {
     spendingCategories: ["food", "transport"],
     budgetingStyle: "flexible",
   });
-  requireAuth();
+  useRequireAuth();
 
   const totalSteps = 3;
   const progress = (currentStep / totalSteps) * 100;
@@ -45,7 +45,7 @@ export default function Onboarding() {
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -97,7 +97,7 @@ export default function Onboarding() {
         let errorData;
         try {
           errorData = await response.json();
-        } catch (parseError) {
+        } catch {
           throw new Error(
             `Server error: ${response.status} ${response.statusText}`
           );
@@ -108,9 +108,8 @@ export default function Onboarding() {
         );
       }
 
-     
       if (data.proceed) {
-        console.log("proceed")
+        console.log("proceed");
         // window.location.href = "/dashboard";
       } else {
         throw new Error(data.message || "Unknown response from server");
@@ -134,19 +133,32 @@ export default function Onboarding() {
   }, [formData, accessToken]);
 
   const steps = [
-    <BasicProfileStep formData={formData} onChange={handleInputChange} />,
-
-    <FinancialBasicsStep formData={formData} onChange={handleInputChange} />,
-
-    <FinancialGoalsStep formData={formData} onChange={handleInputChange} />,
-
+    <BasicProfileStep
+      key="step-0"
+      formData={formData}
+      onChange={handleInputChange}
+    />,
+    <FinancialBasicsStep
+      key="step-1"
+      formData={formData}
+      onChange={handleInputChange}
+    />,
+    <FinancialGoalsStep
+      key="step-2"
+      formData={formData}
+      onChange={handleInputChange}
+    />,
     <SpendingHabitsStep
+      key="step-3"
       formData={formData}
       onChange={handleInputChange}
       onCategoryToggle={handleCategoryToggle}
     />,
-
-    <CompletionStep formData={formData} onChange={handleInputChange} />,
+    <CompletionStep
+      key="step-4"
+      formData={formData}
+      onChange={handleInputChange}
+    />,
   ];
 
   return (

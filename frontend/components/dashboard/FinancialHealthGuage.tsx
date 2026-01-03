@@ -13,20 +13,15 @@ import { useAuthStore } from "@/store/authStore";
 import AddIncomeModal from "./AddIncomeModal";
 
 interface FinancialHealthGaugeProps {
-  income: number;
-  expenses: number;
-  balance: number;
   monthlySummary: MonthlySummary;
 }
 
 const FinancialHealthGauge: React.FC<FinancialHealthGaugeProps> = ({
-  income,
-  expenses,
   monthlySummary,
 }) => {
   const { userProfile } = useAuthStore();
   const incomeData = Object.entries(monthlySummary.incomeCategoryTotals)
-    .filter(([_, value]) => value > 0)
+    .filter(([, value]) => value > 0)
     .map(([name, value]) => ({
       name,
       value,
@@ -39,7 +34,7 @@ const FinancialHealthGauge: React.FC<FinancialHealthGaugeProps> = ({
       freelance: "#8b5cf6",
       gift: "#0d8af1",
       investment: "#ec4899",
-      salaru: "#22c55e",
+      salary: "#22c55e",
       rentals: "#6366f1",
       others: "#6b7280",
     };
@@ -54,9 +49,15 @@ const FinancialHealthGauge: React.FC<FinancialHealthGaugeProps> = ({
       name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
     }));
 
-  // console.log(monthlySummary.incomeCategoryTotals);
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: Array<{ name: string; value: number }>;
+    label?: string;
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-[var(--bg-secondary)] p-3 rounded-lg shadow-md border border-[var(--border-light)]">
@@ -100,8 +101,10 @@ const FinancialHealthGauge: React.FC<FinancialHealthGaugeProps> = ({
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center text-[var(--text-tertiary)] p-4">
-          <p className="text-[14px] mb-[10px]">You have not added any monthly income yet</p>
-          <AddIncomeModal/>
+          <p className="text-[14px] mb-[10px]">
+            You have not added any monthly income yet
+          </p>
+          <AddIncomeModal />
         </div>
       )}
     </div>

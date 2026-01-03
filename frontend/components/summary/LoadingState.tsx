@@ -11,7 +11,7 @@ const StatCardSkeleton = () => (
   </div>
 );
 
-const ChartSkeleton = ({ height = 300 }: { height?: number }) => (
+const ChartSkeleton = () => (
   <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border-light)] animate-pulse">
     <div className="h-6 w-40 bg-[var(--bg-tertiary)] rounded mb-6"></div>
     <div className={`h-[300px] bg-[var(--bg-tertiary)] rounded-xl`}></div>
@@ -31,8 +31,8 @@ export default function LoadingState() {
         ))}
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <ChartSkeleton height={800} />
-        <ChartSkeleton height={800} />
+        <ChartSkeleton />
+        <ChartSkeleton />
       </div>
     </motion.div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 import {
@@ -52,14 +53,49 @@ export default function ProfilePreview() {
   };
 
   const menuItems = [
- { id: "dashboard", label: "Dashboard", icon: User, href: "/dashboard" },
-    { id: "transactions", label: "Transactions", icon: ShoppingBag, href: "/dashboard/transactions" },
-    { id: "goals", label: "Financial Goals", icon: Goal, href: "/dashboard/goals" },
-    { id: "bugdeting", label: "Budgeting", icon: DollarSign, href: "/dashboard/budgeting" },
-    { id: "insights", label: "Insights", icon: Lightbulb, href: "/dashboard/insights" },
-    { id: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
-    { id: "privacy", label: "Privacy & Security", icon: Shield, href: "/dashboard/privacy" },
-    { id: "help", label: "Help & Support", icon: HelpCircle, href: "/dashboard/help" },
+    { id: "dashboard", label: "Dashboard", icon: User, href: "/dashboard" },
+    {
+      id: "transactions",
+      label: "Transactions",
+      icon: ShoppingBag,
+      href: "/dashboard/transactions",
+    },
+    {
+      id: "goals",
+      label: "Financial Goals",
+      icon: Goal,
+      href: "/dashboard/goals",
+    },
+    {
+      id: "bugdeting",
+      label: "Budgeting",
+      icon: DollarSign,
+      href: "/dashboard/budgeting",
+    },
+    {
+      id: "insights",
+      label: "Insights",
+      icon: Lightbulb,
+      href: "/dashboard/insights",
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: Settings,
+      href: "/dashboard/settings",
+    },
+    {
+      id: "privacy",
+      label: "Privacy & Security",
+      icon: Shield,
+      href: "/dashboard/privacy",
+    },
+    {
+      id: "help",
+      label: "Help & Support",
+      icon: HelpCircle,
+      href: "/dashboard/help",
+    },
     {
       id: "logout",
       label: "Sign Out",

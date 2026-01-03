@@ -10,6 +10,7 @@ interface AuthState {
   updateProfile: () => Promise<void>;
   logout: () => void;
   hydrateFromCookies: () => void;
+  patchUserProfile: (updates: Partial<User>) => void;
 }
 
 const initializeState = () => {
@@ -30,7 +31,11 @@ const initializeState = () => {
     try {
       const userProfile: User = JSON.parse(userProfileRaw);
 
-      if (userProfile && typeof userProfile === "object" && userProfile.nickname) {
+      if (
+        userProfile &&
+        typeof userProfile === "object" &&
+        userProfile.nickname
+      ) {
         state = { accessToken, userProfile, isSignedIn: true };
       } else {
         console.error(
@@ -50,7 +55,7 @@ const initializeState = () => {
 
 export const useAuthStore = create<AuthState>((set) => ({
   ...initializeState(),
-  
+
   setAuth: (accessToken: string, userProfile: User) => {
     set({
       accessToken,
@@ -63,7 +68,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       maxAge: 60 * 60 * 24,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax" as const,
-    //   domain: process.env.NODE_ENV === "production" ? "" : undefined,
+      //   domain: process.env.NODE_ENV === "production" ? "" : undefined,
     };
 
     setCookie("accessToken", accessToken, cookieOptions);
@@ -92,7 +97,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     ) {
       try {
         const userProfile: User = JSON.parse(userProfileRaw);
-        if (userProfile && typeof userProfile === "object" && userProfile.nickname) {
+        if (
+          userProfile &&
+          typeof userProfile === "object" &&
+          userProfile.nickname
+        ) {
           set({
             accessToken,
             userProfile,
@@ -107,5 +116,21 @@ export const useAuthStore = create<AuthState>((set) => ({
         });
       }
     }
+  },
+  patchUserProfile: (updates) => {
+    set((state) => {
+      if (!state.userProfile) return state;
+      const newUserProfile = { ...state.userProfile, ...updates };
+
+      const cookieOptions = {
+        path: "/",
+        maxAge: 60 * 60 * 24,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax" as const,
+      };
+      setCookie("userProfile", JSON.stringify(newUserProfile), cookieOptions);
+
+      return { userProfile: newUserProfile };
+    });
   },
 }));

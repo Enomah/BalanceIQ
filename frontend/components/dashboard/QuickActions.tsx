@@ -1,26 +1,29 @@
-import React from 'react';
-import { Plus, TrendingUp, Target, Calendar } from 'lucide-react';
-import AddExpenseModal from './AddExpenseModal';
-import AddIncomeModal from './AddIncomeModal';
-import AddGoalModal from '../goals/create/AddGoalModal';
+import React from "react";
+import { Calendar } from "lucide-react";
+import AddExpenseModal from "./AddExpenseModal";
+import AddIncomeModal from "./AddIncomeModal";
+import AddGoalModal from "../goals/create/AddGoalModal";
+import Link from "next/link";
 
 const QuickActions: React.FC = () => {
   return (
     <div className="quick-actions bg-[var(--bg-secondary)] p-[10px] sm:p-6 rounded-xl shadow-sm">
-      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-[10px] sm:mb-6">Quick Actions</h3>
-      
-      <div className="space-y-3">
+      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-[10px] sm:mb-6">
+        Quick Actions
+      </h3>
 
-        <AddExpenseModal/>
-        
-        <AddIncomeModal/>
+      <div className="grid grid-cols-2 gap-[10px]">
+        <AddExpenseModal />
+        <AddIncomeModal />
+        <AddGoalModal />
 
-        <AddGoalModal/>
-        
-        <button className="w-full flex items-center p-3 bg-[var(--bg-tertiary)] text-[var(--text-secondary)] rounded-lg hover:bg-[var(--neutral-200)] dark:hover:bg-[var(--neutral-600)] transition-colors">
-          <Calendar size={20} className="mr-3" />
-          Monthly Report
-        </button>
+        <Link
+          href="/dashboard/export"
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all hover:scale-105 active:scale-95 hover:bg-[var(--primary-900)] text-white bg-[var(--primary-600)]`}
+        >
+          <Calendar size={18} />
+          Generate Report
+        </Link>
       </div>
     </div>
   );

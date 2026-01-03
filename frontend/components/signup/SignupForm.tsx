@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import {
-  Eye,
-  EyeOff,
-  CheckCircle,
-  XCircle,
-  ArrowRight,
-  User,
-  Mail,
-  Lock,
-} from "lucide-react";
+import { Mail, User, Lock } from "lucide-react";
 import FormInput from "./FormInput";
 import SubmitButton from "./SubmitButton";
 import FormFooter from "./FormFooter";
@@ -58,13 +48,13 @@ export default function SignupForm({
   setIsSubmitting,
 }: SignupFormProps) {
   const [showOTPForm, setShowOTPForm] = useState(false);
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<unknown>(null);
 
   useEffect(() => {
-    const otpStatus = localStorage.getItem('otpVerificationInProgress');
-    const userDataStr = localStorage.getItem('userData');
-    
-    if (otpStatus === 'true' && userDataStr) {
+    const otpStatus = localStorage.getItem("otpVerificationInProgress");
+    const userDataStr = localStorage.getItem("userData");
+
+    if (otpStatus === "true" && userDataStr) {
       setShowOTPForm(true);
       setUserData(JSON.parse(userDataStr));
     }
@@ -108,7 +98,8 @@ export default function SignupForm({
     } else if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = "Password must contain uppercase, lowercase, and number";
+      newErrors.password =
+        "Password must contain uppercase, lowercase, and number";
     }
 
     if (!formData.confirmPassword) {
@@ -136,8 +127,8 @@ export default function SignupForm({
           fullName: formData.fullName,
           nickname: formData.nickname,
           email: formData.email,
-          password: formData.password
-        })
+          password: formData.password,
+        }),
       });
 
       const data = await response.json();
@@ -148,7 +139,7 @@ export default function SignupForm({
         setUserData(data.user);
         setShowOTPForm(true);
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);
@@ -157,7 +148,7 @@ export default function SignupForm({
 
   if (showOTPForm && userData) {
     return (
-      <OTPVerification 
+      <OTPVerification
         email={formData.email}
         onBack={() => {
           setShowOTPForm(false);
@@ -240,7 +231,9 @@ export default function SignupForm({
             value={formData.confirmPassword}
             onChange={handleChange}
             error={errors.confirmPassword}
-            toggleVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
+            toggleVisibility={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
             showVisibilityToggle={true}
           />
 

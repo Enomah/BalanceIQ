@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import {
   ResponsiveContainer,
   PieChart,
@@ -30,7 +30,7 @@ const CHART_COLORS = {
   ],
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -68,7 +68,6 @@ export default function IncomeSourcesChart({
 
   return (
     <motion.div
-      //@ts-ignore
       variants={itemVariants}
       className="bg-[var(--bg-secondary)] rounded-xl p-[10px]  sm:p-6 shadow-sm"
     >
@@ -93,8 +92,7 @@ export default function IncomeSourcesChart({
             cy="50%"
             labelLine={false}
             label={({ name, percentage }) =>
-              //@ts-ignore
-              `${name} (${percentage.toFixed(0)}%)`
+              `${name} (${(Number(percentage) || 0).toFixed(0)}%)`
             }
             outerRadius={80}
             fill="#8884d8"

@@ -1,8 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { TrendingUp, Wallet, Zap, ArrowUp, ArrowDown } from "lucide-react";
 import { SummaryData } from "@/types/summaryTypes";
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -35,7 +35,6 @@ export default function MonthlyComparison({
 
   return (
     <motion.div
-      //@ts-ignore
       variants={itemVariants}
       className="bg-[var(--bg-secondary)] rounded-xl p-[10px]  sm:p-6 shadow-sm"
     >

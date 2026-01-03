@@ -4,7 +4,6 @@ import {
   Bar,
   PieChart,
   Pie,
-  Cell,
   CartesianGrid,
   XAxis,
   YAxis,
@@ -12,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { PieChart as PieChartIcon, Plus } from "lucide-react";
+import { PieChart as PieChartIcon } from "lucide-react";
 import { MonthlySummary } from "@/types/dashboardTypes";
 import { User } from "@/types/userTypes";
 import AddExpenseModal from "./AddExpenseModal";
@@ -25,7 +24,6 @@ interface ExpenseBreakdownProps {
 
 const ExpenseBreakdown: React.FC<ExpenseBreakdownProps> = ({
   expenseData,
-  monthlySummary,
   userProfile,
 }) => {
   const topExpenses = expenseData
@@ -36,7 +34,15 @@ const ExpenseBreakdown: React.FC<ExpenseBreakdownProps> = ({
       name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
     }));
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: Array<{ name: string; value: number }>;
+    label?: string;
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-[var(--bg-secondary)] p-3 rounded-lg shadow-md border border-[var(--border-light)]">
@@ -96,8 +102,8 @@ const ExpenseBreakdown: React.FC<ExpenseBreakdownProps> = ({
                   outerRadius={80}
                   paddingAngle={2}
                   dataKey="value"
-                  label={(props: any) =>
-                    `${(((props as any).percent ?? 0) * 100).toFixed(0)}%`
+                  label={({ percent }) =>
+                    `${((Number(percent) || 0) * 100).toFixed(0)}%`
                   }
                   labelLine={false}
                 ></Pie>{" "}

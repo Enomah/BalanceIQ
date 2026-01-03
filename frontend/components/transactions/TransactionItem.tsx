@@ -1,50 +1,23 @@
-import React from "react";
-import { TrendingUp, TrendingDown, Wallet, CreditCard } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import { Transaction } from "@/types/dashboardTypes";
-import { useAuthStore } from "@/store/authStore";
 import { formatCurrency } from "@/lib/format";
+import { useTransactionItemLogic } from "@/hooks/transactions/useTransactionItemLogic";
+import TransactionModals from "./TransactionModals";
 
 interface TransactionItemProps {
   transaction: Transaction;
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
-  const { userProfile } = useAuthStore();
-
-  const getTransactionStyles = () => {
-    switch (transaction.type) {
-      case "income":
-        return {
-          icon: <TrendingUp size={16} />,
-          bg: "bg-[var(--success-100)] text-[var(--success-600)] dark:bg-[var(--success-900)] dark:text-[var(--success-400)]",
-          text: "text-[var(--success-600)] dark:text-[var(--success-400)]",
-          prefix: "+",
-        };
-      case "expense":
-        return {
-          icon: <TrendingDown size={16} />,
-          bg: "bg-[var(--error-100)] text-[var(--error-600)] dark:bg-[var(--error-900)] dark:text-[var(--error-400)]",
-          text: "text-[var(--error-600)] dark:text-[var(--error-400)]",
-          prefix: "-",
-        };
-      case "savings":
-        return {
-          icon: <Wallet size={16} />,
-          bg: "bg-[var(--primary-100)] text-[var(--primary-600)] dark:bg-[var(--primary-900)] dark:text-[var(--primary-400)]",
-          text: "text-[var(--primary-600)] dark:text-[var(--primary-400)]",
-          prefix: "",
-        };
-      default:
-        return {
-          icon: <CreditCard size={16} />,
-          bg: "bg-[var(--neutral-100)] text-[var(--neutral-600)] dark:bg-[var(--neutral-900)] dark:text-[var(--neutral-400)]",
-          text: "text-[var(--neutral-600)] dark:text-[var(--neutral-400)]",
-          prefix: "",
-        };
-    }
-  };
-
-  const { icon, bg, text, prefix } = getTransactionStyles();
+  const {
+    userProfile,
+    isDeleteModalOpen,
+    setIsDeleteModalOpen,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    deleteMutation,
+    styles: { icon, bg, text, prefix },
+  } = useTransactionItemLogic(transaction);
 
   const date = new Date(transaction.createdAt).toLocaleDateString("en-US", {
     month: "short",
@@ -61,11 +34,38 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
         </h4>
         <p className="text-sm text-[var(--text-secondary)]">{date}</p>
       </div>
-      <div className={`font-medium ${text}`}>
-        {prefix}
+      <div className="flex items-center gap-4">
+        <div className={`font-medium ${text}`}>
+          {prefix}
+          {userProfile &&
+            formatCurrency(transaction.amount, userProfile?.currency)}
+        </div>
 
-        {userProfile && formatCurrency(transaction.amount, userProfile?.currency)}
+        <div className="flex gap-1">
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="p-1.5 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:text-[var(--primary-600)] transition-colors"
+          >
+            <Edit2 size={14} />
+          </button>
+          <button
+            onClick={() => setIsDeleteModalOpen(true)}
+            className="p-1.5 rounded-lg hover:bg-[var(--bg-tertiary)] text-[var(--text-tertiary)] hover:text-[var(--error-600)] transition-colors"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
       </div>
+
+      <TransactionModals
+        transaction={transaction}
+        isDeleteModalOpen={isDeleteModalOpen}
+        onCloseDeleteModal={() => setIsDeleteModalOpen(false)}
+        isEditModalOpen={isEditModalOpen}
+        onCloseEditModal={() => setIsEditModalOpen(false)}
+        onConfirmDelete={() => deleteMutation.mutate()}
+        isDeleting={deleteMutation.isPending}
+      />
     </div>
   );
 };

@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 
-export function requireAuth() {
+export function useRequireAuth() {
   const router = useRouter();
   const pathname = usePathname();
-  const { accessToken, isSignedIn, userProfile, hydrateFromCookies } = useAuthStore();
+  const { accessToken, isSignedIn, userProfile, hydrateFromCookies } =
+    useAuthStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {

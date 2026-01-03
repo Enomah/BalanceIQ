@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
-import Logo from "../ui/Logo";
 
 const BrandingSection: React.FC = () => {
   return (

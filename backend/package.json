@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,10 +18,12 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "json-2-csv": "^5.5.10",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.6",
+    "pdfkit": "^0.17.2",
     "resend": "^6.1.0"
   },
   "devDependencies": {

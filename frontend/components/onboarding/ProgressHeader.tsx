@@ -1,6 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import React from "react";
-import Logo from "../ui/Logo";
 import { useAuthStore } from "@/store/authStore";
 
 interface ProgressHeaderProps {
@@ -15,14 +14,14 @@ export default function ProgressHeader({ progress }: ProgressHeaderProps) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center space-x-3"
-        >
-
-        </motion.div>
+        ></motion.div>
 
         <div className="text-[var(--primary-100)] text-[20px]">
           Hello{" "}
-          <span className="text-[var(--primary-500)] text-[25px]">{userProfile?.nickname}</span>{" "}
-          let's onboard you
+          <span className="text-[var(--primary-500)] text-[25px]">
+            {userProfile?.nickname}
+          </span>{" "}
+          let&apos;s onboard you
         </div>
 
         <motion.div

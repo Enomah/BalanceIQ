@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { LogIn, X } from "lucide-react";
 import { NavItem } from "./Navbar";
 import { useAuthStore } from "@/store/authStore";
@@ -26,7 +26,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, navItems }) => {
     };
   }, [isOpen]);
 
-  const overlayVariants = {
+  const overlayVariants: Variants = {
     closed: {
       opacity: 0,
       transition: {
@@ -43,7 +43,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, navItems }) => {
     },
   };
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     closed: {
       x: "100%",
       transition: {
@@ -60,7 +60,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, navItems }) => {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     closed: {
       opacity: 0,
       x: 50,

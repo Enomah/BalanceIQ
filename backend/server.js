@@ -5,9 +5,14 @@ import cors from "cors";
 import authRoutes from "./src/routes/authRoutes.js";
 import onboardingRoutes from "./src/routes/onboardingRoutes.js";
 import dashboardRoutes from "./src/routes/dashboardRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
+import supportRoutes from "./src/routes/support/supportRoutes.js";
+import exportRoutes from "./src/routes/exportRoutes.js";
+import shoppingListRoutes from "./src/routes/shoppingListRoutes.js";
 import { errorHandler } from "./src/middleware/errorHandler.js";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec, swaggerUiOptions } from "./src/config/swagger.js";
+import { processRecurringTransactions } from "./src/utils/recurringProcessor.js";
 
 dotenv.config();
 
@@ -19,13 +24,30 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/onboarding", onboardingRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
+app.use("/api/user", userRoutes);
+app.use("/api/support", supportRoutes);
+app.use("/api/export", exportRoutes);
+app.use("/api/shopping-lists", shoppingListRoutes);
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, swaggerUiOptions)
+);
 
 app.use(errorHandler);
 
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ MongoDB connected"))
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("✅ MongoDB connected");
+    // Run recurring processor on startup
+    processRecurringTransactions();
+    // Run every hour
+    setInterval(processRecurringTransactions, 60 * 60 * 1000);
+  })
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 app.get("/", (req, res) => {

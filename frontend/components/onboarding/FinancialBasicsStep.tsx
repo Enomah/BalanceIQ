@@ -6,7 +6,7 @@ import React from "react";
 
 interface FinancialBasicsStepProps {
   formData: OnboardingFormData;
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
 }
 
 const FinancialBasicsStep: React.FC<FinancialBasicsStepProps> = ({

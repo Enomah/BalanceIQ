@@ -15,6 +15,9 @@ import {
   HelpCircle,
   LogOut,
   Goal,
+  FileDown,
+  RefreshCcw,
+  ShoppingCart,
 } from "lucide-react";
 import SidebarHeader from "./SideBarHeader";
 
@@ -29,13 +32,66 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
 
   const menuItems: MenuItem[] = [
     { id: "dashboard", label: "Dashboard", icon: User, href: "/dashboard" },
-    { id: "transactions", label: "Transactions", icon: ShoppingBag, href: "/dashboard/transactions" },
-    { id: "goals", label: "Financial Goals", icon: Goal, href: "/dashboard/goals" },
-    { id: "bugdeting", label: "Budgeting", icon: DollarSign, href: "/dashboard/budgeting" },
-    { id: "insights", label: "Insights", icon: Lightbulb, href: "/dashboard/insights" },
-    { id: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
-    { id: "privacy", label: "Privacy & Security", icon: Shield, href: "/dashboard/privacy" },
-    { id: "help", label: "Help & Support", icon: HelpCircle, href: "/dashboard/help" },
+    {
+      id: "transactions",
+      label: "Transactions",
+      icon: ShoppingBag,
+      href: "/dashboard/transactions",
+    },
+    {
+      id: "goals",
+      label: "Financial Goals",
+      icon: Goal,
+      href: "/dashboard/goals",
+    },
+    {
+      id: "bugdeting",
+      label: "Budgeting",
+      icon: DollarSign,
+      href: "/dashboard/budgeting",
+    },
+    {
+      id: "recurring",
+      label: "Recurring",
+      icon: RefreshCcw,
+      href: "/dashboard/recurring",
+    },
+    {
+      id: "shopping-list",
+      label: "Shopping List",
+      icon: ShoppingCart,
+      href: "/dashboard/shopping-list",
+    },
+    {
+      id: "insights",
+      label: "Insights",
+      icon: Lightbulb,
+      href: "/dashboard/insights",
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      icon: Settings,
+      href: "/dashboard/settings",
+    },
+    {
+      id: "export",
+      label: "Data Export",
+      icon: FileDown,
+      href: "/dashboard/export",
+    },
+    {
+      id: "privacy",
+      label: "Privacy & Security",
+      icon: Shield,
+      href: "/dashboard/privacy",
+    },
+    {
+      id: "help",
+      label: "Help & Support",
+      icon: HelpCircle,
+      href: "/dashboard/help",
+    },
     { id: "logout", label: "Sign Out", icon: LogOut, isDestructive: true },
   ];
 
@@ -62,7 +118,6 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
     setIsSidebarHovered(false);
   };
 
-
   const showTooltip = isCollapsed && isSidebarHovered;
 
   return (
@@ -73,7 +128,6 @@ export default function Sidebar({ currentPath, userProfile }: SidebarProps) {
       onMouseEnter={handleSidebarMouseEnter}
       onMouseLeave={handleSidebarMouseLeave}
     >
-    
       <SidebarHeader isCollapsed={isCollapsed} onToggle={toggleSidebar} />
       <Navigation
         menuItems={menuItems}

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { PiggyBank } from "lucide-react";
 import { SummaryData } from "@/types/summaryTypes";
@@ -23,7 +23,7 @@ const CHART_COLORS = {
   ],
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: {
     y: 0,
@@ -58,7 +58,6 @@ export default function SavingsProgressChart({
 
   return (
     <motion.div
-      //@ts-ignore
       variants={itemVariants}
       className="bg-[var(--bg-secondary)] rounded-xl p-[10px]  sm:p-6 shadow-sm lg:col-span-2"
     >
@@ -85,8 +84,8 @@ export default function SavingsProgressChart({
               labelLine={false}
               label={({ name, value }) =>
                 `${name}: ${
-                  //@ts-ignore  
-                  userProfile && formatCurrency(value, userProfile.currency)
+                  userProfile &&
+                  formatCurrency(Number(value) || 0, userProfile.currency)
                 }`
               }
               outerRadius={80}

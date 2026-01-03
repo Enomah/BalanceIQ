@@ -8,7 +8,7 @@ interface SpendingHabitsStepProps {
     spendingCategories: string[];
     budgetingStyle: string;
   };
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
   onCategoryToggle: (category: string) => void;
 }
 
@@ -79,7 +79,9 @@ const SpendingHabitsStep: React.FC<SpendingHabitsStepProps> = ({
             >
               <div className="flex flex-col items-center space-y-1">
                 <span className="text-xl">{category.emoji}</span>
-                <span className="text-xs font-medium text-center">{category.label}</span>
+                <span className="text-xs font-medium text-center">
+                  {category.label}
+                </span>
               </div>
             </motion.button>
           ))}
@@ -112,9 +114,13 @@ const SpendingHabitsStep: React.FC<SpendingHabitsStepProps> = ({
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-1">
                   <span className="text-lg">{style.emoji}</span>
-                  <div className="font-medium text-[var(--primary-50)]">{style.label}</div>
+                  <div className="font-medium text-[var(--primary-50)]">
+                    {style.label}
+                  </div>
                 </div>
-                <div className="text-sm text-[var(--text-secondary)]">{style.description}</div>
+                <div className="text-sm text-[var(--text-secondary)]">
+                  {style.description}
+                </div>
               </div>
             </motion.label>
           ))}

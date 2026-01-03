@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { TrendingUp, Target, PieChart } from "lucide-react";
 
-const floatingAnimation = {
+const floatingAnimation: Variants = {
   animate: {
     y: [0, -15, 0],
     transition: {

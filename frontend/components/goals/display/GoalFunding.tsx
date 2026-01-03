@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Plus, Loader2, Sparkles, X } from "lucide-react";
-import { Goal, MonthlySummary, Transaction } from "@/types/dashboardTypes";
-import { useAuthStore } from "@/store/authStore";
-import { baseUrl } from "@/api/rootUrls";
-import { useDashboardStore } from "@/store/dashboardStore";
-import { useGoalStore } from "@/store/goalsStore";
+"use client";
+
+import { Plus, Loader2, X } from "lucide-react";
+import { Goal } from "@/types/dashboardTypes";
+import { useGoalFundingLogic } from "@/hooks/goals/useGoalFundingLogic";
 
 interface GoalFundingProps {
   goal: Goal;
@@ -23,117 +21,18 @@ const GoalFunding: React.FC<GoalFundingProps> = ({
   localGoal,
   setLocalGoal,
 }) => {
-  const [fundAmount, setFundAmount] = useState("");
-  const [submitError, setSubmitError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { userProfile, accessToken } = useAuthStore();
-  const { updateMonthlySummary, dashboardData, addRecentTransaction } =
-    useDashboardStore();
-  const { setStats, stats } = useGoalStore();
-
-  const handleFundGoal = async () => {
-    setSubmitError("");
-    const parsedAmount = parseFloat(fundAmount);
-
-    if (!parsedAmount || parsedAmount <= 0) {
-      setSubmitError("Amount must be a number greater than 0");
-      return;
-    }
-
-    if (parsedAmount > localGoal.targetAmount - localGoal.currentAmount) {
-      setSubmitError(
-        `Maximum amount you can add is ${userProfile?.currency}${(
-          localGoal.targetAmount - localGoal.currentAmount
-        ).toLocaleString()}`
-      );
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        `${baseUrl}/dashboard/goals/${goal?.id}/fund`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ amount: parsedAmount }),
-        }
-      );
-
-      const data = await response.json();
-
-      // console.log(goal);
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || `HTTP error! status: ${response.status}`
-        );
-      }
-
-      setLocalGoal({
-        ...localGoal,
-        currentAmount: data.goal.currentAmount,
-        progress: data.goal.progress,
-        status: data.goal.status,
-      });
-      setFundAmount("");
-      setShowFundInput(false);
-
-      // console.log(data.goal.status)
-
-      if (data.goal.status === "completed") {
-        console.log("completed")
-        const updatedStats = {
-          totalGoals: stats.totalGoals,
-          totalActive: stats.totalActive -= 1,
-          totalTarget: stats.totalTarget,
-          totalSaved: stats.totalSaved,
-        };
-
-        setStats(updatedStats);
-      }
-
-      const updatedStats = {
-        totalGoals: stats.totalGoals,
-        totalActive: stats.totalActive,
-        totalTarget: stats.totalTarget,
-        totalSaved: (stats.totalSaved += parsedAmount),
-      };
-
-      setStats(updatedStats);
-
-      if (dashboardData) {
-        const transaction: Transaction = {
-          type: "savings",
-          id: crypto.randomUUID(),
-          createdAt: new Date().toISOString(),
-          amount: parsedAmount,
-          description: `Funded ${goal.title || "Goal"}`,
-          category: "goal",
-        };
-
-        const newMonthlySummary: MonthlySummary = {
-          ...dashboardData.monthlySummary,
-          balance: (dashboardData.monthlySummary.balance -= transaction.amount),
-        };
-
-        addRecentTransaction(transaction);
-        updateMonthlySummary(newMonthlySummary);
-      }
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Failed to fund goal. Please try again."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    fundAmount,
+    setFundAmount,
+    submitError,
+    isLoading,
+    handleFundSubmit,
+  } = useGoalFundingLogic({
+    goal,
+    onGoalComplete,
+    setShowFundInput,
+    setLocalGoal,
+  });
 
   return (
     <>
@@ -143,7 +42,7 @@ const GoalFunding: React.FC<GoalFundingProps> = ({
         </div>
       )}
       {showFundInput && localGoal.progress < 100 && (
-        <div className="mb-3 p-3 Кроме bg-[var(--bg-tertiary)] rounded-lg">
+        <div className="mb-3 p-3 bg-[var(--bg-tertiary)] rounded-lg">
           <p className="text-[12px] mb-[5px] italic text-[var(--text-secondary)]">
             Funds will be deducted from your current balance and allocated to
             this goal.
@@ -160,16 +59,14 @@ const GoalFunding: React.FC<GoalFundingProps> = ({
               disabled={isLoading}
             />
             <button
-              onClick={handleFundGoal}
+              onClick={handleFundSubmit}
               className="px-3 bg-[var(--success-500)] text-white rounded text-sm hover:bg-[var(--success-600)] disabled:opacity-50 flex items-center space-x-1"
               disabled={isLoading}
             >
               {isLoading ? (
                 <Loader2 className="animate-spin" size={16} />
               ) : (
-                <>
-                  <Plus size={14} />
-                </>
+                <Plus size={14} />
               )}
             </button>
             <button

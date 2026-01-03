@@ -70,8 +70,8 @@ const Roadmap = ({
             <span className="text-[var(--primary-500)]">Roadmap</span>
           </h2>
           <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            We're continuously improving BalanceIQ with new features and
-            enhancements. Here's what we're working on.
+            We&apos;re continuously improving BalanceIQ with new features and
+            enhancements. Here&apos;s what we&apos;re working on.
           </p>
         </div>
 

@@ -1,103 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
-import { baseUrl } from "@/api/rootUrls";
-import { requireAuth } from "@/lib/requireAuth";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 import TransactionsHeader from "./TransactionsHeader";
+import TransactionsFilters from "./TransactionsFilters";
 import TransactionsList from "./TransactionsList";
 import ErrorState from "./ErrorState";
 import EmptyState from "./EmptyState";
 import LoadingState from "./LoadingState";
 import Sidebar from "../sidebar/Sidebar";
 import WelcomeSection from "../dashboard/WelcomeSection";
-import { useTransactionStore } from "@/store/transactionsStore";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTransactionsPageLogic } from "@/hooks/transactions/useTransactionsPageLogic";
 
 export default function TransactionsPage() {
-  const { accessToken, userProfile } = useAuthStore();
+  const { userProfile } = useAuthStore();
+  useRequireAuth();
+
   const {
-    transactions,
+    filters,
+    isLoading,
+    isFetchingNextPage,
+    error,
     groupedTransactions,
-    setTransactions,
-    addTransaction,
-    updateTransactions,
-  } = useTransactionStore();
-
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    totalPages: 1,
-    next: null as string | null,
-  });
-
-  requireAuth();
-
-  const fetchData = async (url: string, isLoadMore = false) => {
-    try {
-      if (isLoadMore) {
-        setLoadingMore(true);
-      } else {
-        setLoading(true);
-      }
-      setError(null);
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch transactions: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (isLoadMore) {
-        updateTransactions(data);
-      } else {
-        setTransactions(data);
-      }
-
-      setPagination({
-        currentPage: data.currentPage,
-        totalPages: data.totalPages,
-        next: data.next,
-      });
-    } catch (err) {
-      console.error("Error fetching transactions:", err);
-      setError(
-        err instanceof Error ? err.message : "Failed to load transactions"
-      );
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  };
-
-  const loadMore = () => {
-    if (pagination.next && !loadingMore) {
-      fetchData(pagination.next, true);
-    }
-  };
-
-  const handleAddTransaction = (transaction: any) => {
-    addTransaction(transaction);
-  };
-
-  const handleRefresh = () => {
-    fetchData(`${baseUrl}/dashboard/transactions`);
-  };
-
-  useEffect(() => {
-    fetchData(`${baseUrl}/dashboard/transactions`);
-  }, [accessToken]);
+    transactions,
+    pagination,
+    fetchNextPage,
+    handleFilterChange,
+    handleRefresh,
+  } = useTransactionsPageLogic();
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
@@ -110,30 +41,41 @@ export default function TransactionsPage() {
           <div className="sticky z-[100] top-0 left-0">
             <WelcomeSection userProfile={userProfile} />
           </div>
-          {loading && transactions.length === 0 ? (
+          {isLoading && transactions.length === 0 ? (
             <LoadingState />
           ) : error && transactions.length === 0 ? (
-            <ErrorState error={error} onRetry={handleRefresh} />
-          ) : groupedTransactions.length === 0 ? (
-            <EmptyState />
+            <ErrorState
+              error={(error as Error)?.message || "Error"}
+              onRetry={handleRefresh}
+            />
           ) : (
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               <motion.div
+                key="transactions-content"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                // className="space-y-8"
+                exit={{ opacity: 0 }}
+                className="max-w-2xl mx-auto"
               >
-                <div className="max-w-2xl mx-auto">
-                  <div className="px-[10px] sm:px-6 pb-[20px] ">
-                    <TransactionsHeader />
+                <div className="px-[10px] sm:px-6 pb-[20px]">
+                  <TransactionsHeader />
+                  <TransactionsFilters onFilterChange={handleFilterChange} />
+
+                  {groupedTransactions.length === 0 ? (
+                    <EmptyState
+                      isFiltered={
+                        !!(filters.search || filters.type || filters.category)
+                      }
+                    />
+                  ) : (
                     <TransactionsList
                       groupedTransactions={groupedTransactions}
-                      loading={loadingMore}
+                      loading={isFetchingNextPage}
                       currentPage={pagination.currentPage}
                       totalPages={pagination.totalPages}
-                      onLoadMore={loadMore}
+                      onLoadMore={() => fetchNextPage()}
                     />
-                  </div>
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>

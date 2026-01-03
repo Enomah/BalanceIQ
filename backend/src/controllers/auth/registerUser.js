@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
       nickname,
       email,
       password: hashedPassword,
-      isVerified: false, 
+      isVerified: false,
     });
 
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -91,6 +91,7 @@ export const registerUser = async (req, res) => {
         nickname: user.nickname,
         email: user.email,
         isVerified: user.isVerified,
+        role: user.role,
       },
     });
   } catch (error) {

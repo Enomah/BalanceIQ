@@ -1,17 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useAuthStore } from "@/store/authStore";
-
 interface ErrorStateProps {
   error: string;
   onRetry: () => void;
 }
 
 export default function ErrorState({ error, onRetry }: ErrorStateProps) {
-  const { userProfile } = useAuthStore();
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
-
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
       <div className="flex-1 min-h-screen bg-[var(--bg-primary)] py-8">

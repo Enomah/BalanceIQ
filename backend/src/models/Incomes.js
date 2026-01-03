@@ -26,6 +26,10 @@ const incomeSchema = new mongoose.Schema(
       type: Date,
       default: "",
     },
+    transactionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transaction",
+    },
   },
   { timestamps: true }
 );

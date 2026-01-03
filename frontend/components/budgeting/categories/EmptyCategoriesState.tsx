@@ -15,8 +15,8 @@ export default function EmptyCategoriesState() {
         No Categories Allocated
       </h3>
       <p className="text-[var(--text-secondary)] max-w-md mx-auto">
-        You haven't allocated any budget to categories yet. 
-        Start by creating a budget plan to track your spending.
+        You haven&apos;t allocated any budget to categories yet. Start by
+        creating a budget plan to track your spending.
       </p>
     </motion.div>
   );

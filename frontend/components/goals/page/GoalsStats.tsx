@@ -16,12 +16,15 @@ interface Props {
 interface StatCardProps {
   label: string;
   value: string | number;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{
+    className?: string;
+    style?: React.CSSProperties;
+  }>;
   bg: string;
   color: string;
 }
 
-export default function GoalsStats({  }: Props) {
+export default function GoalsStats({}: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { userProfile, accessToken } = useAuthStore();

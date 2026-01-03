@@ -1,9 +1,6 @@
-import { useAuthStore } from "@/store/authStore";
-import Sidebar from "@/components/sidebar/Sidebar";
+import React from "react";
 
 export default function GoalsSkeleton() {
-  const { userProfile } = useAuthStore();
-
   return (
     <div className="">
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">

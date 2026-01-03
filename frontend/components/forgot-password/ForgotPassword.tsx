@@ -58,7 +58,8 @@ const ForgotPassword: React.FC = () => {
     } else if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = "Password must contain uppercase, lowercase, and number";
+      newErrors.password =
+        "Password must contain uppercase, lowercase, and number";
     }
 
     if (!formData.confirmPassword) {
@@ -87,13 +88,14 @@ const ForgotPassword: React.FC = () => {
 
       const data = await response.json();
 
-
       if (!response.ok) {
-        setErrors({ submit: data.message || "Failed to send OTP. Please try again." });
+        setErrors({
+          submit: data.message || "Failed to send OTP. Please try again.",
+        });
       } else {
         setShowOTPForm(true);
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);
@@ -133,7 +135,7 @@ const ForgotPassword: React.FC = () => {
           window.location.href = "/login";
         }, 2000);
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);

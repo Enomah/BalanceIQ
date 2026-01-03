@@ -1,11 +1,9 @@
-"use client"
+"use client";
 
-import Dashboard from "@/components/dashboard/Dashboard"
-import { requireAuth } from "@/lib/requireAuth"
+import Dashboard from "@/components/dashboard/Dashboard";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
-export default function page() {
-    requireAuth()
-  return (
-    <Dashboard/>
-  )
+export default function DashboardPage() {
+  useRequireAuth();
+  return <Dashboard />;
 }

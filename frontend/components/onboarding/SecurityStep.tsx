@@ -9,7 +9,7 @@ interface SecurityStepProps {
     enable2FA: boolean;
     recoveryEmail: string;
   };
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
 }
 
 const SecurityStep: React.FC<SecurityStepProps> = ({ formData, onChange }) => {
@@ -40,7 +40,9 @@ const SecurityStep: React.FC<SecurityStepProps> = ({ formData, onChange }) => {
             />
             <div
               className={`w-12 h-6 rounded-full transition-colors duration-200 ${
-                formData.enable2FA ? "bg-[var(--success-500)]" : "bg-[var(--border-medium)]"
+                formData.enable2FA
+                  ? "bg-[var(--success-500)]"
+                  : "bg-[var(--border-medium)]"
               }`}
             />
             <div

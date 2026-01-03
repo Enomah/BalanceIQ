@@ -2,7 +2,7 @@ import { Target, TrendingUp, TrendingDown } from "lucide-react";
 import { MonthlyBudget } from "@/types/budgetTypes";
 import { formatCurrency } from "@/lib/format";
 import { useAuthStore } from "@/store/authStore";
-import { getStatusColor } from "./calculations";
+// import { getStatusColor } from "./calculations";
 import BudgetStatCard from "./BudgetStatCard";
 
 interface Props {
@@ -38,7 +38,9 @@ export default function BudgetStatsGrid({ budget }: Props) {
       <BudgetStatCard
         title="Remaining"
         value={formatCurrency(remaining, currency)}
-        subtitle={`${((remaining / budget.totalBudget) * 100).toFixed(1)}% left`}
+        subtitle={`${((remaining / budget.totalBudget) * 100).toFixed(
+          1
+        )}% left`}
         icon={<TrendingDown className="w-6 h-6 text-[var(--success-600)]" />}
         colorClass="text-[var(--success-600)]"
         bgClass="bg-[var(--success-100)]"

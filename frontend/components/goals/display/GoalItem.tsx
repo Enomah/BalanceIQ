@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Goal } from "@/types/dashboardTypes";
 import GoalHeader from "./GoalHeader";
 import GoalProgress from "./GoalProgress";
 import GoalFunding from "./GoalFunding";
 import GoalWithdrawal from "./GoalWithdrawal";
 import GoalActions from "./GoalActions";
+import { useGoalItemLogic } from "@/hooks/goals/useGoalItemLogic";
 
 interface GoalItemProps {
   goal: Goal;
@@ -19,9 +20,14 @@ const GoalItem: React.FC<GoalItemProps> = ({
   onGoalComplete,
   onGoalRemove,
 }) => {
-  const [showWithdrawWarning, setShowWithdrawWarning] = useState(false);
-  const [showFundInput, setShowFundInput] = useState(false);
-  const [localGoal, setLocalGoal] = useState<Goal>(goal);
+  const {
+    showWithdrawWarning,
+    setShowWithdrawWarning,
+    showFundInput,
+    setShowFundInput,
+    localGoal,
+    setLocalGoal,
+  } = useGoalItemLogic(goal);
 
   return (
     <div

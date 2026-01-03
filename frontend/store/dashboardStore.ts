@@ -18,6 +18,10 @@ interface DashboardStore {
   addRecentTransaction: (
     transaction: DashboardData["recentTransactions"][0]
   ) => void;
+  removeRecentTransaction: (transactionId: string) => void;
+  patchRecentTransaction: (
+    transaction: DashboardData["recentTransactions"][0]
+  ) => void;
   updateActiveGoals: (goals: DashboardData["activeGoals"]) => void;
   updateGoal: (
     goalId: string,
@@ -83,6 +87,36 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
               transaction,
               ...state.dashboardData.recentTransactions,
             ],
+          }
+        : null,
+    })),
+
+  removeRecentTransaction: (transactionId) =>
+    set((state) => ({
+      dashboardData: state.dashboardData
+        ? {
+            ...state.dashboardData,
+            recentTransactions: state.dashboardData.recentTransactions.filter(
+              (t) => t.id !== transactionId && t._id !== transactionId
+            ),
+          }
+        : null,
+    })),
+
+  patchRecentTransaction: (updatedTx) =>
+    set((state) => ({
+      dashboardData: state.dashboardData
+        ? {
+            ...state.dashboardData,
+            recentTransactions: state.dashboardData.recentTransactions.map(
+              (t) => {
+                const isMatch =
+                  (t.id && (t.id === updatedTx.id || t.id === updatedTx._id)) ||
+                  (t._id &&
+                    (t._id === updatedTx.id || t._id === updatedTx._id));
+                return isMatch ? { ...t, ...updatedTx } : t;
+              }
+            ),
           }
         : null,
     })),

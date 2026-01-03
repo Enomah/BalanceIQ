@@ -6,10 +6,10 @@ import React from "react";
 
 interface CompletionStepProps {
   formData: OnboardingFormData;
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: unknown) => void;
 }
 
-const CompletionStep: React.FC<CompletionStepProps> = ({ formData, onChange }) => {
+const CompletionStep: React.FC<CompletionStepProps> = () => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -36,7 +36,7 @@ const CompletionStep: React.FC<CompletionStepProps> = ({ formData, onChange }) =
           Setup Complete! 🎉
         </h3>
         <p className="text-[var(--text-secondary)]">
-          You're all set to start your financial journey with BalanceIQ
+          You&apos;re all set to start your financial journey with BalanceIQ
         </p>
       </div>
 

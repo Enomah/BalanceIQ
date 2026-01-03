@@ -42,6 +42,7 @@ export const login = async (req, res) => {
         id: user._id,
         email: user.email,
         nickname: user.nickname,
+        role: user.role,
       },
       process.env.JWT_SECRET || "fallback-secret",
       { expiresIn: "7d" }
@@ -60,6 +61,7 @@ export const login = async (req, res) => {
         isVerified: user.isVerified,
         avatar: user.avatar,
         currency: user.currency,
+        role: user.role,
         createdAt: user.createdAt,
       },
       accessToken: token,

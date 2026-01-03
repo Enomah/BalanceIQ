@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { baseUrl } from "@/api/rootUrls";
 import StatsSection from "./StatsSection";
-import OTPVerification from "../signup/OTPVerification";
 import BrandingSection from "../login/BrandingSection";
 import VerifyEmailFormContent from "./VerifyEmailContentForm";
 import FeatureHighlights from "../login/FeatureHighlights";
@@ -67,7 +66,7 @@ const Verification: React.FC = () => {
       } else {
         setShowOTPForm(true);
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);

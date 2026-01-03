@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowLeft, Bell } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { User } from "@/types/userTypes";
 import ThemeToggle from "../ui/ThemeToggle";
 import ProfilePreview from "../ui/ProfilePreview";
@@ -13,12 +13,6 @@ interface WelcomeSectionProps {
 
 const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userProfile }) => {
   const router = useRouter();
-  const getTimeOfDay = (): string => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Morning";
-    if (hour < 18) return "Afternoon";
-    return "Evening";
-  };
 
   return (
     <section className="welcome-section bg-[var(--bg-secondary)] p-[10px] md:p-[10px] sm:p-6 shadow-sm mb-[10px] sm:mb-6">
@@ -32,8 +26,7 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userProfile }) => {
           </button>
           <div>
             <h1 className="text-[20px] sm:text-2xl font-bold text-[var(--text-primary)]">
-              Hey {" "}
-              {userProfile?.fullName.split(" ")[0] || "User"} 👋
+              Hey {userProfile?.fullName.split(" ")[0] || "User"} 👋
             </h1>
           </div>
         </div>

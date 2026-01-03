@@ -1,5 +1,5 @@
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import React, { useState } from "react";
+import { LucideIcon, Eye, EyeOff } from "lucide-react";
 
 interface FormInputProps {
   id: string;
@@ -17,13 +17,14 @@ interface FormInputProps {
   rows?: number;
   maxLength?: number;
   currencySymbol?: string;
+  disabled?: boolean;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
   id,
   label,
   icon: Icon,
-  type = 'text',
+  type = "text",
   placeholder,
   value,
   onChange,
@@ -33,14 +34,21 @@ const FormInput: React.FC<FormInputProps> = ({
   step,
   rows,
   maxLength,
-  currencySymbol
+  currencySymbol,
+  disabled = false,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const inputClass = `w-full p-3 border rounded-lg focus:ring-2 focus:ring-[var(--primary-500)] focus:border-[var(--primary-500)] outline-none transition-colors ${
-    error ? 'border-[var(--error-500)]' : 'border-[var(--border-light)]'
+    error ? "border-[var(--error-500)]" : "border-[var(--border-light)]"
+  } ${
+    disabled
+      ? "bg-[var(--bg-tertiary)] cursor-not-allowed opacity-70"
+      : "bg-[var(--bg-primary)]"
   }`;
 
   const renderInput = () => {
-    if (type === 'textarea') {
+    if (type === "textarea") {
       return (
         <textarea
           id={id}
@@ -48,17 +56,20 @@ const FormInput: React.FC<FormInputProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           rows={rows || 3}
+          maxLength={maxLength}
+          disabled={disabled}
           className={`${inputClass} resize-none pl-10`}
         />
       );
     }
 
-    if (type === 'select') {
+    if (type === "select") {
       return (
         <select
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
           className={`${inputClass} appearance-none pl-10`}
         >
           {placeholder && <option value="">{placeholder}</option>}
@@ -67,28 +78,38 @@ const FormInput: React.FC<FormInputProps> = ({
       );
     }
 
+    const isPassword = type === "password";
+    const currentType = isPassword && showPassword ? "text" : type;
+
     return (
       <input
         id={id}
-        type={type}
+        type={currentType}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}
         min={min}
         step={step}
-        className={`${inputClass} ${currencySymbol ? 'pl-13' : 'pl-10'}`}
+        maxLength={maxLength}
+        disabled={disabled}
+        className={`${inputClass} ${currencySymbol ? "pl-13" : "pl-10"} ${
+          isPassword ? "pr-12" : ""
+        }`}
       />
     );
   };
 
   return (
-    <div className='flex flex-col items-start'>
-      <label htmlFor={id} className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+    <div className="flex flex-col items-start">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-[var(--text-secondary)] mb-2"
+      >
         {label}
         {required && <span className="text-[var(--error-500)] ml-1">*</span>}
       </label>
-      
+
       <div className="relative w-full">
         {/* Icon or Currency Symbol */}
         {currencySymbol ? (
@@ -102,11 +123,19 @@ const FormInput: React.FC<FormInputProps> = ({
         ) : null}
 
         {renderInput()}
+
+        {type === "password" && !disabled && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--text-tertiary)] hover:text-[var(--primary-600)] transition-colors"
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        )}
       </div>
 
-      {error && (
-        <p className="mt-1 text-sm text-[var(--error-500)]">{error}</p>
-      )}
+      {error && <p className="mt-1 text-sm text-[var(--error-500)]">{error}</p>}
     </div>
   );
 };

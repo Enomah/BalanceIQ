@@ -1,8 +1,10 @@
-import SummaryPage from '@/components/summary/SummaryPage'
-import React from 'react'
+import SummaryPage from "@/components/summary/SummaryPage";
+import React, { Suspense } from "react";
 
-export default function page() {
+export default function SummaryDashboardPage() {
   return (
-    <SummaryPage />
-  )
+    <Suspense fallback={null}>
+      <SummaryPage />
+    </Suspense>
+  );
 }

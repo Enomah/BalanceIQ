@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import User from "../../models/Users.js";
 import Income from "../../models/Incomes.js";
 import Expense from "../../models/Expenses.js";
 import Transaction from "../../models/Transactions.js";

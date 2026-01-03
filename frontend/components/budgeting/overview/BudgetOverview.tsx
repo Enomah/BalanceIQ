@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import TopCategories from "./TopCategories";
 import { MonthlyBudget } from "@/types/budgetTypes";
-import { 
-  combineCategories, 
-  getChartData, 
-  getOverspentCategories, 
-  getTopCategories 
+import {
+  combineCategories,
+  getChartData,
+  getOverspentCategories,
+  getTopCategories,
 } from "./calculations";
 import BudgetStatsGrid from "./BudgetStatsGrid";
 import BudgetAllocationChart from "./BudgetAllocationChat";
@@ -19,7 +19,7 @@ interface BudgetOverviewProps {
   onEditBudget: () => void;
 }
 
-export default function BudgetOverview({ budget, onEditBudget }: BudgetOverviewProps) {
+export default function BudgetOverview({ budget }: BudgetOverviewProps) {
   const combined = combineCategories(budget);
   const chartData = getChartData(combined, budget.totalBudget);
   const overspent = getOverspentCategories(combined);
@@ -38,8 +38,11 @@ export default function BudgetOverview({ budget, onEditBudget }: BudgetOverviewP
           className="space-y-4"
         >
           <OverspendingAlert categories={overspent} />
-          <TopCategories categories={topCategories} totalBudget={budget.totalBudget} />
-          <BudgetStatusSummary 
+          <TopCategories
+            categories={topCategories}
+            totalBudget={budget.totalBudget}
+          />
+          <BudgetStatusSummary
             totalBudget={budget.totalBudget}
             totalSpent={budget.totalSpent}
             year={budget.year}

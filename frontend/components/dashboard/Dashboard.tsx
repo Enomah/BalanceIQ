@@ -1,8 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/store/authStore";
-import React, { useEffect, useState } from "react";
-import { MenuItem } from "@/types/dashboardTypes";
+import React from "react";
 import SkeletonLoader from "./SkeletonLoader";
 import Sidebar from "../sidebar/Sidebar";
 import WelcomeSection from "./WelcomeSection";
@@ -10,50 +8,28 @@ import AccountOverview from "./AccountOverview";
 import ChartsSection from "./ChartsSection";
 import GoalsSection from "../goals/display/GoalsSection";
 import RecentActivity from "./RecentActivity";
-// import FinancialTips from "./FinancialTips";
-// import QuickActions from "./QuickActions";
-import { getLocalStorage, setLocalStorage } from "@/lib/storage";
+import FinancialTips from "./FinancialTips";
+import QuickActions from "./QuickActions";
 import DashboardTour from "./Dashboardtour";
 import TourTrigger from "./TourTrigger";
-import { useDashboardStore } from "@/store/dashboardStore";
+import { useDashboardPageLogic } from "@/hooks/dashboard/useDashboardPageLogic";
+import DashboardError from "./DashboardError";
 
 const Dashboard: React.FC = () => {
-  const { userProfile, logout } = useAuthStore();
-  const { dashboardData, loading, error, fetchDashboard } = useDashboardStore();
-  const [showTour, setShowTour] = useState<boolean>(false);
-  const [hasSeenTour, setHasSeenTour] = useState<boolean>(false);
-
-  useEffect(() => {
-    const tourSeen = getLocalStorage("dashboardTourSeen");
-    if (!tourSeen) {
-      const timer = setTimeout(() => {
-        setShowTour(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    } else {
-      setHasSeenTour(true);
-    }
-  }, []);
-
-  const handleTourClose = () => {
-    setShowTour(false);
-    setLocalStorage("dashboardTourSeen", "true");
-    setHasSeenTour(true);
-  };
-
-  const handleTourOpen = () => {
-    setShowTour(true);
-  };
-
-  useEffect(() => {
-    fetchDashboard();
-  }, []);
-
-  // console.log(dashboardData);
-
-  const monthlySummary = dashboardData?.monthlySummary;
-  const recentTransactions = dashboardData?.recentTransactions;
-  const activeGoals = dashboardData?.activeGoals;
+  const {
+    userProfile,
+    dashboardData,
+    isLoading,
+    error,
+    refetch,
+    showTour,
+    hasSeenTour,
+    handleTourClose,
+    handleTourOpen,
+    monthlySummary,
+    recentTransactions,
+    activeGoals,
+  } = useDashboardPageLogic();
 
   return (
     <div className="flex h-screen bg-[var(--bg-primary)]">
@@ -66,21 +42,8 @@ const Dashboard: React.FC = () => {
           </div>
 
           {error ? (
-            <div className="flex-1 flex items-center justify-center mt-[200px]">
-              <div className="text-center p-6 bg-[var(--bg-secondary)] rounded-xl shadow-sm">
-                <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
-                  Error Loading Dashboard
-                </h2>
-                <p className="text-[var(--text-secondary)] mb-4">{error}</p>
-                <button
-                  onClick={fetchDashboard}
-                  className="px-4 py-2 bg-[var(--primary-500)] text-white rounded-lg hover:bg-[var(--primary-600)] transition-colors"
-                >
-                  Try Again
-                </button>
-              </div>
-            </div>
-          ) : loading && !dashboardData ? (
+            <DashboardError error={error} onRetry={() => refetch()} />
+          ) : isLoading && !dashboardData ? (
             <SkeletonLoader />
           ) : (
             <div className="px-[10px] sm:px-6 pb-[20px]">
@@ -92,21 +55,18 @@ const Dashboard: React.FC = () => {
               )}
 
               <section className="grid grid-cols-1 lg:grid-cols-2 gap-[10px] sm:gap-6 mb-[10px] sm:mb-6">
-                {activeGoals && <GoalsSection activeGoals={activeGoals} />}
+                {activeGoals && (
+                  <GoalsSection activeGoals={activeGoals.slice(0, 3)} />
+                )}
                 {recentTransactions && (
                   <RecentActivity recentTransactions={recentTransactions} />
                 )}
               </section>
 
-              {/* Uncomment if needed
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-[10px] sm:gap-6">
-          <FinancialTips
-            monthlySummary={monthlySummary}
-            activeGoals={activeGoals}
-          />
-          <QuickActions />
-        </section>
-        */}
+              <section className="grid grid-cols-1 lg:grid-cols-3 gap-[10px] sm:gap-6">
+                <FinancialTips insights={dashboardData?.insights || []} />
+                <QuickActions />
+              </section>
 
               <DashboardTour isOpen={showTour} onClose={handleTourClose} />
             </div>

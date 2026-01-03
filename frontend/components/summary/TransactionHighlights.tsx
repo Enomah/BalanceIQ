@@ -1,17 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  Crown,
-  Zap,
-  DollarSign,
-  Home,
-  Car,
-  Heart,
-  GraduationCap,
-  Utensils,
-  ShoppingCart,
-  TrendingUp,
-  BarChart3,
-} from "lucide-react";
+import { Crown, Zap } from "lucide-react";
 import { SummaryData } from "@/types/summaryTypes";
 import TransactionItem from "../transactions/TransactionItem";
 
@@ -23,33 +11,6 @@ const containerVariants = {
       staggerChildren: 0.08,
     },
   },
-};
-
-const itemVariants = {
-  hidden: { y: 30, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-};
-
-const CATEGORY_ICONS: { [key: string]: any } = {
-  food: Utensils,
-  housing: Home,
-  transportation: Car,
-  entertainment: Zap,
-  healthcare: Heart,
-  education: GraduationCap,
-  shopping: ShoppingCart,
-  gift: Heart,
-  salary: DollarSign,
-  freelance: Zap,
-  investment: TrendingUp,
-  business: BarChart3,
 };
 
 interface TransactionHighlightsProps {
@@ -79,15 +40,6 @@ export default function TransactionHighlights({
         <div className="space-y-4">
           {summaryData.highlights.largestIncome.map((income, index) => {
             // const IconComponent = CATEGORY_ICONS[income.category] || DollarSign;
-            const transaction = {
-              id: income.id,
-              description: income.description,
-              amount: income.amount,
-              type: "income",
-              createdAt: income.createdAt,
-              category: income.category,
-            };
-
             return <TransactionItem key={index} transaction={income} />;
           })}
         </div>
@@ -105,9 +57,7 @@ export default function TransactionHighlights({
         </div>
         <div className="space-y-4">
           {summaryData.highlights.largestExpenses.map((expense, index) => {
-            return (
-              <TransactionItem key={index} transaction={expense} />
-            );
+            return <TransactionItem key={index} transaction={expense} />;
           })}
         </div>
       </motion.div>

@@ -1,4 +1,4 @@
-import { Edit2 } from "lucide-react";
+// import { Edit2 } from "lucide-react";
 
 interface Props {
   icon: React.ReactNode;
@@ -8,7 +8,12 @@ interface Props {
   color: string;
 }
 
-export default function CategoryHeader({ icon, label, percentageOfTotal, color }: Props) {
+export default function CategoryHeader({
+  icon,
+  label,
+  percentageOfTotal,
+  color,
+}: Props) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -19,8 +24,12 @@ export default function CategoryHeader({ icon, label, percentageOfTotal, color }
           {icon}
         </div>
         <div>
-          <h3 className="font-semibold text-[var(--text-primary)] text-sm">{label}</h3>
-          <p className="text-[var(--text-secondary)] text-xs mt-0.5">{percentageOfTotal}% of total</p>
+          <h3 className="font-semibold text-[var(--text-primary)] text-sm">
+            {label}
+          </h3>
+          <p className="text-[var(--text-secondary)] text-xs mt-0.5">
+            {percentageOfTotal}% of total
+          </p>
         </div>
       </div>
     </div>

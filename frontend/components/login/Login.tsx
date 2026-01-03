@@ -88,7 +88,7 @@ const Login: React.FC<LoginFormProps> = ({ onToggleForm }) => {
         setAuth(data.accessToken, data.user);
         window.location.href = "/dashboard";
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);

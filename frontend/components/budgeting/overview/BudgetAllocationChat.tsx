@@ -1,12 +1,19 @@
 import { motion } from "framer-motion";
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+} from "recharts";
 import CustomTooltip from "./CustomTooltip";
 
 interface ChartData {
   name: string;
   value: number;
   color: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface Props {
@@ -43,10 +50,12 @@ export default function BudgetAllocationChart({ data }: Props) {
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              
+
               <Legend
                 formatter={(value) => (
-                  <span style={{ color: 'var(--text-primary)', fontSize: '12px' }}>
+                  <span
+                    style={{ color: "var(--text-primary)", fontSize: "12px" }}
+                  >
                     {value}
                   </span>
                 )}
